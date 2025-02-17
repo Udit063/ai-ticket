@@ -53,7 +53,7 @@ export const RegisterForm = () => {
       toast.success(
         "Registration successful! Please check your email to verify your account."
       );
-      router.push("/dashboard");
+      router.push("/verify");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
       console.log(error);

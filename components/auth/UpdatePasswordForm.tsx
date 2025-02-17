@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +18,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { updatePassword } from "@/actions/resetPassword";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 const formSchema = z
   .object({
@@ -36,16 +43,36 @@ export const UpdatePasswordForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Get the token from the URL
-  const token = searchParams.get("token");
-
   useEffect(() => {
+    const token = searchParams.get("token");
+
     if (!token) {
-      setError(
-        "Invalid or missing reset token. Please request a new password reset link."
-      );
+      setError("No token found. Please request a new password reset link.");
+      return;
     }
-  }, [token]);
+
+    const verifyToken = async () => {
+      try {
+        // Set the session with the token
+        const { error: sessionError } = await supabase.auth.verifyOtp({
+          token_hash: token,
+          type: "recovery",
+        });
+
+        if (sessionError) {
+          console.error("Session error:", sessionError);
+          setError(
+            "Invalid or expired token. Please request a new password reset link."
+          );
+        }
+      } catch (err) {
+        console.error("Token verification error:", err);
+        setError("Invalid token. Please request a new password reset link.");
+      }
+    };
+
+    verifyToken();
+  }, [searchParams]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -56,23 +83,27 @@ export const UpdatePasswordForm = () => {
   });
 
   const onSubmit = async (values: FormValues) => {
-    if (!token) {
-      setError("Missing reset token");
-      return;
-    }
-
     try {
       setIsLoading(true);
-      const { success, error } = await updatePassword(values.password, token);
+      //   const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = searchParams.get("token");
 
-      if (error) {
-        toast.error(error);
+      if (!accessToken) {
+        setError("Missing access token");
+        return;
+      }
+
+      const { success, error: updateError } = await updatePassword(
+        values.password
+      );
+
+      if (updateError) {
+        toast.error(updateError);
         return;
       }
 
       if (success) {
         toast.success("Password updated successfully!");
-        // Redirect to login page after 2 seconds
         setTimeout(() => {
           router.push("/login");
         }, 2000);

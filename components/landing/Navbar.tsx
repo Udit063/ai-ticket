@@ -42,12 +42,14 @@ export const Navbar = () => {
               >
                 Testimonials
               </a>
-              <Button
-                variant="ghost"
-                className="text-gray-600 hover:text-primary-600"
-              >
-                Sign In
-              </Button>
+              <Link href="/login">
+                <Button
+                  variant="ghost"
+                  className="text-gray-600 hover:text-primary-600"
+                >
+                  Sign In
+                </Button>
+              </Link>
               <Button className="bg-primary-500 hover:bg-primary-600 text-white">
                 Get Started
               </Button>

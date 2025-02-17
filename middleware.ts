@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
+
   const supabase = createMiddlewareClient({ req, res });
 
   const {
@@ -12,14 +13,20 @@ export async function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
+  const publicPaths = [
+    "/",
+    "/login",
+    "/register",
+    "/onboarding",
+    "/reset-password",
+    "/update-password",
+    "/verify",
+  ];
+
   if (
-    pathname === "/" ||
-    pathname === "/login" ||
-    pathname === "/register" ||
-    pathname === "/onboarding" ||
-    pathname === "/reset-password" ||
-    pathname === "/update-password" ||
-    pathname === "/verify"
+    publicPaths.some(
+      (path) => pathname === path || pathname.startsWith(`${path}?`)
+    )
   ) {
     return res;
   }
@@ -32,5 +39,7 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.ico$).*)",
+  ],
 };

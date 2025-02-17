@@ -11,7 +11,9 @@ export async function resetPassword(
   email: string
 ): Promise<ResetPasswordResult> {
   try {
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/update-password`,
+    });
 
     if (error) {
       console.error("Error sending reset password email:", error.message);
@@ -26,35 +28,10 @@ export async function resetPassword(
 }
 
 export async function updatePassword(
-  newPassword: string,
-  accessToken: string
+  newPassword: string
 ): Promise<UpdatePasswordResult> {
   try {
-    const supabaseAuth = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
-      {
-        auth: {
-          persistSession: false,
-        },
-      }
-    );
-
-    const { error: sessionError } = await supabaseAuth.auth.setSession({
-      access_token: accessToken,
-      refresh_token: "",
-    });
-
-    if (sessionError) {
-      console.error("Error setting session:", sessionError.message);
-      return {
-        success: false,
-        error:
-          "Invalid or expired token. Please request a new password reset link.",
-      };
-    }
-
-    const { error } = await supabaseAuth.auth.updateUser({
+    const { error } = await supabase.auth.updateUser({
       password: newPassword,
     });
 
