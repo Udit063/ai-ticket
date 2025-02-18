@@ -25,7 +25,10 @@ export async function middleware(req: NextRequest) {
 
   if (
     publicPaths.some(
-      (path) => pathname === path || pathname.startsWith(`${path}?`)
+      (path) =>
+        pathname === path ||
+        pathname.startsWith(`${path}?`) ||
+        pathname.startsWith(`${path}#`)
     )
   ) {
     return res;

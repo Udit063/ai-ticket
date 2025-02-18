@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { resetPassword } from "@/actions/resetPassword";
+import { supabase } from "@/lib/supabase";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -35,24 +36,36 @@ export const ResetPasswordForm = () => {
   });
 
   const onSubmit = async (values: FormValues) => {
+    // try {
+    //   setIsLoading(true);
+    //   const { success, error } = await resetPassword(values.email);
+
+    //   if (error) {
+    //     toast.error(error);
+    //     return;
+    //   }
+
+    //   if (success) {
+    //     setEmailSent(true);
+    //     toast.success("Reset link sent! Check your email inbox.");
+    //   }
+    // } catch (error) {
+    //   console.error("Reset password error:", error);
+    //   toast.error("Something went wrong. Please try again.");
+    // } finally {
+    //   setIsLoading(false);
+    // }
     try {
-      setIsLoading(true);
-      const { success, error } = await resetPassword(values.email);
-
-      if (error) {
-        toast.error(error);
-        return;
-      }
-
-      if (success) {
-        setEmailSent(true);
-        toast.success("Reset link sent! Check your email inbox.");
-      }
+      const { data, error } = await supabase.auth.resetPasswordForEmail(
+        values.email,
+        {
+          redirectTo: `http://localhost:3000/update-password`,
+        }
+      );
+      console.log("gya mail", values.email);
+      console.log("gya data", data);
     } catch (error) {
-      console.error("Reset password error:", error);
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
+      console.log(error);
     }
   };
 

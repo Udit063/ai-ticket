@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { toast } from "sonner";
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { AuthWrapper } from "@/components/auth/AuthWrapper";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { updatePassword } from "@/actions/resetPassword";
+// import { updatePassword } from "@/actions/resetPassword";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -40,39 +39,70 @@ type FormValues = z.infer<typeof formSchema>;
 export const UpdatePasswordForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isReady, setIsReady] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const [data, setData] = useState<{
+    password: string;
+    confirmPassword: string;
+  }>({ password: "", confirmPassword: "" });
 
-  useEffect(() => {
-    const token = searchParams.get("token");
+  // useEffect(() => {
+  //   const handleAuthStateChange = async () => {
+  //     try {
+  //       const { data: authListener } = supabase.auth.onAuthStateChange(
+  //         async (event, session) => {
+  //           if (event === "PASSWORD_RECOVERY") {
+  //             console.log("Password recovery event detected", session);
+  //             setIsReady(true);
+  //           }
+  //         }
+  //       );
 
-    if (!token) {
-      setError("No token found. Please request a new password reset link.");
-      return;
-    }
+  //       if (typeof window !== "undefined") {
+  //         if (window.location.hash) {
+  //           const hashParams = new URLSearchParams(
+  //             window.location.hash.substring(1)
+  //           );
+  //           const accessToken = hashParams.get("access_token");
+  //           const refreshToken = hashParams.get("refresh_token");
+  //           const type = hashParams.get("type");
 
-    const verifyToken = async () => {
-      try {
-        // Set the session with the token
-        const { error: sessionError } = await supabase.auth.verifyOtp({
-          token_hash: token,
-          type: "recovery",
-        });
+  //           if (accessToken && type === "recovery") {
+  //             const { error: sessionError } = await supabase.auth.setSession({
+  //               access_token: accessToken,
+  //               refresh_token: refreshToken || "",
+  //             });
 
-        if (sessionError) {
-          console.error("Session error:", sessionError);
-          setError(
-            "Invalid or expired token. Please request a new password reset link."
-          );
-        }
-      } catch (err) {
-        console.error("Token verification error:", err);
-        setError("Invalid token. Please request a new password reset link.");
-      }
-    };
+  //             if (sessionError) {
+  //               console.error("Session error:", sessionError);
+  //               setError(
+  //                 "Invalid or expired token. Please request a new password reset link."
+  //               );
+  //             } else {
+  //               console.log("Session set successfully");
+  //               setIsReady(true);
+  //             }
+  //           } else {
+  //             setError(
+  //               "No valid recovery token found. Please request a new password reset link."
+  //             );
+  //           }
+  //         }
+  //       }
 
-    verifyToken();
-  }, [searchParams]);
+  //       return () => {
+  //         authListener?.subscription.unsubscribe();
+  //       };
+  //     } catch (err) {
+  //       console.error("Error in auth state handling:", err);
+  //       setError(
+  //         "Something went wrong. Please request a new password reset link."
+  //       );
+  //     }
+  //   };
+
+  //   handleAuthStateChange();
+  // }, []);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -82,38 +112,72 @@ export const UpdatePasswordForm = () => {
     },
   });
 
-  const onSubmit = async (values: FormValues) => {
-    try {
-      setIsLoading(true);
-      //   const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const accessToken = searchParams.get("token");
+  // const onSubmit = async (values: FormValues) => {
+  //   try {
+  //     setIsLoading(true);
 
-      if (!accessToken) {
-        setError("Missing access token");
-        return;
-      }
+  //     const {
+  //       data: { session },
+  //       error: sessionError,
+  //     } = await supabase.auth.getSession();
 
-      const { success, error: updateError } = await updatePassword(
-        values.password
-      );
+  //     console.log("Client - Retrieved session:", session);
 
-      if (updateError) {
-        toast.error(updateError);
-        return;
-      }
+  //     if (sessionError || !session) {
+  //       console.error("No active session found", sessionError);
+  //       toast.error(
+  //         "Authentication session not found. Try requesting a new reset link."
+  //       );
+  //       return;
+  //     }
 
-      if (success) {
-        toast.success("Password updated successfully!");
-        setTimeout(() => {
-          router.push("/login");
-        }, 2000);
-      }
-    } catch (error) {
-      console.error("Update password error:", error);
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
+  //     console.log("Client - Submitting with session:", session.user.id);
+  //     console.log("session: ", session);
+
+  //     const { success, error: updateError } = await updatePassword(
+  //       values.password
+  //     );
+
+  //     if (updateError) {
+  //       console.error("Update error:", updateError);
+  //       return;
+  //     }
+
+  //     if (success) {
+  //       toast.success("Password updated successfully!");
+  //       setTimeout(() => {
+  //         router.push("/login");
+  //       }, 2000);
+  //     }
+  //   } catch (error) {
+  //     console.error("Update password error:", error);
+  //     toast.error("Something went wrong. Please try again.");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const confirmPasswords = async () => {
+    const { password, confirmPassword } = data;
+    if (password !== confirmPassword)
+      return alert("Your passwords are incorrect");
+    const { data: resetData, error } = await supabase.auth.updateUser({
+      password: data.password,
+    });
+
+    if (resetData) {
+      console.log("resetData:", resetData);
+      redirect("/login");
     }
+    if (error) console.log("error aagya:", error);
+  };
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setData((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -138,7 +202,7 @@ export const UpdatePasswordForm = () => {
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={confirmPasswords} className="space-y-6">
               <FormField
                 control={form.control}
                 name="password"
@@ -153,6 +217,7 @@ export const UpdatePasswordForm = () => {
                         placeholder="Enter your new password"
                         {...field}
                         className="h-12 bg-gray-50/50"
+                        // onChange={handleChange}
                       />
                     </FormControl>
                     <FormMessage />
@@ -173,6 +238,7 @@ export const UpdatePasswordForm = () => {
                         placeholder="Confirm your new password"
                         {...field}
                         className="h-12 bg-gray-50/50"
+                        // onChange={handleChange}
                       />
                     </FormControl>
                     <FormMessage />

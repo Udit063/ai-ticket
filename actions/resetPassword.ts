@@ -2,6 +2,8 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { ResetPasswordResult, UpdatePasswordResult } from "@/types/index";
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY as string;
@@ -12,7 +14,7 @@ export async function resetPassword(
 ): Promise<ResetPasswordResult> {
   try {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/update-password`,
+      redirectTo: `http://localhost:3000/update-password`,
     });
 
     if (error) {
@@ -31,6 +33,20 @@ export async function updatePassword(
   newPassword: string
 ): Promise<UpdatePasswordResult> {
   try {
+    const cookieStore = cookies();
+    const supabase = createServerComponentClient({
+      cookies: () => cookieStore,
+    });
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    console.log("Server action - current session:", session?.user?.id);
+
+    if (!session) {
+      return { success: false, error: "No active session found" };
+    }
+
     const { error } = await supabase.auth.updateUser({
       password: newPassword,
     });
