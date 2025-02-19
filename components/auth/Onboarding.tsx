@@ -31,12 +31,8 @@ export const Onboarding = () => {
   const [timeRange, setTimeRange] = useState("1");
   const [isConnecting, setIsConnecting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
-  const [workspaceName, setWorkspaceName] = useState("");
-  const [importStatus, setImportStatus] = useState<{
-    completed: boolean;
-    ticketsCount: number;
-    error?: string;
-  } | null>(null);
+  // const [workspaceName, setWorkspaceName] = useState("");
+  const [importError, setImportError] = useState<string | null>(null);
 
   const { data: session } = useSession();
   const router = useRouter();
@@ -47,77 +43,30 @@ export const Onboarding = () => {
     await signIn("intercom", { callbackUrl: "/onboarding", redirect: true });
   };
 
+  const isIntercomConnected = !!session?.accessToken;
+
   const handleImportTickets = async () => {
     if (!session?.accessToken) {
+      console.error("No access token available");
       return;
     }
 
     setIsImporting(true);
+    setImportError(null);
 
     try {
-      console.log("start hua");
-
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      console.log("user bhi mil gya", user);
-
-      if (!user) {
-        throw new Error("User not authenticated");
-      }
-
-      const workspace = await getIntercomWorkspaceInfo(session.accessToken);
-      setWorkspaceName(workspace.name);
-
-      const result = await importIntercomTickets(
-        session.accessToken,
-        parseInt(timeRange),
-        user.id
-      );
-      console.log("yahan bhi aagya");
-
-      if (result.completed) {
-        console.log("result chl gya");
-
-        setImportStatus({
-          completed: true,
-          ticketsCount: result.ticketsImported,
-          error: undefined,
-        });
-
-        // Update user profile to mark onboarding as complete
-        await supabase.from("users").upsert({
-          id: user.id,
-          onboarding_completed: true,
-          intercom_connected: true,
-          intercom_workspace: workspace.name,
-          intercom_account_id: session.providerAccountId,
-        });
-        console.log("hogya bc");
-
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 2000);
-      } else {
-        setImportStatus({
-          completed: false,
-          ticketsCount: 0,
-          error: result.error,
-        });
-      }
+      const tickets = await importIntercomTickets();
+      console.log("Imported tickets:", tickets);
+      router.push("/dashboard");
     } catch (error) {
       console.error("Import error:", error);
-      setImportStatus({
-        completed: false,
-        ticketsCount: 0,
-        error: "Failed to import tickets",
-      });
+      setImportError(
+        error instanceof Error ? error.message : "Failed to import tickets"
+      );
     } finally {
       setIsImporting(false);
     }
   };
-
-  const isIntercomConnected = !!session?.accessToken;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -136,7 +85,7 @@ export const Onboarding = () => {
               <div className="p-4 bg-green-50 rounded-md flex items-center space-x-2">
                 <CheckCircle className="h-5 w-5 text-green-500" />
                 <span className="text-green-700 font-medium">
-                  Connected to {workspaceName || "Intercom"}
+                  Connected to {"Intercom"}
                 </span>
               </div>
 
@@ -166,21 +115,8 @@ export const Onboarding = () => {
                 {isImporting ? "Importing..." : "Import Tickets"}
               </Button>
 
-              {importStatus && (
-                <div
-                  className={`p-4 rounded-md ${
-                    importStatus.error ? "bg-red-50" : "bg-green-50"
-                  }`}
-                >
-                  {importStatus.error ? (
-                    <p className="text-red-700">{importStatus.error}</p>
-                  ) : (
-                    <p className="text-green-700">
-                      Successfully imported {importStatus.ticketsCount} tickets.
-                      {importStatus.completed && " Redirecting to dashboard..."}
-                    </p>
-                  )}
-                </div>
+              {importError && (
+                <p className="text-red-500 mt-2">{importError}</p>
               )}
             </>
           ) : (

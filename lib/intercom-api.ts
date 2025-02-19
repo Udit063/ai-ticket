@@ -36,49 +36,15 @@ export async function getIntercomWorkspaceInfo(
 }
 
 // Import tickets based on time range (months)
-export async function importIntercomTickets(
-  accessToken: string,
-  timeRangeMonths: number,
-  userId: string
-): Promise<ImportStatus> {
-  try {
-    intercomAPI.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${accessToken}`;
+export async function importIntercomTickets() {
+  const response = await fetch("/api/intercom/tickets");
 
-    // Calculate date range
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setMonth(startDate.getMonth() - timeRangeMonths);
-
-    // Get tickets within date range
-    const response = await intercomAPI.get("/tickets", {
-      params: {
-        created_at_after: Math.floor(startDate.getTime() / 1000),
-        created_at_before: Math.floor(endDate.getTime() / 1000),
-      },
-    });
-
-    const tickets = response.data.tickets || [];
-
-    // Here you would store tickets in your Supabase database
-    // This is a placeholder for the actual database operation
-    console.log(`Imported ${tickets.length} tickets for user ${userId}`);
-
-    return {
-      started: true,
-      completed: true,
-      ticketsImported: tickets.length,
-    };
-  } catch (error) {
-    console.error("Error importing tickets:", error);
-    return {
-      started: true,
-      completed: false,
-      ticketsImported: 0,
-      error: "Failed to import tickets from Intercom",
-    };
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(
+      `HTTP error! status: ${response.status}. ${errorData.error || ""}`
+    );
   }
-}
 
-export default intercomAPI;
+  return await response.json();
+}
