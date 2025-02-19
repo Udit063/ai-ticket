@@ -158,18 +158,26 @@ export const UpdatePasswordForm = () => {
   // };
 
   const confirmPasswords = async () => {
-    const { password, confirmPassword } = data;
-    if (password !== confirmPassword)
-      return alert("Your passwords are incorrect");
-    const { data: resetData, error } = await supabase.auth.updateUser({
-      password: data.password,
-    });
+    try {
+      setIsLoading(true);
+      const { password, confirmPassword } = data;
+      if (password !== confirmPassword)
+        return alert("Your passwords are incorrect");
+      const { data: resetData, error } = await supabase.auth.updateUser({
+        password: data.password,
+      });
 
-    if (resetData) {
-      console.log("resetData:", resetData);
-      redirect("/login");
+      if (resetData) {
+        console.log("resetData:", resetData);
+        redirect("/login");
+      }
+      if (error) console.log("error aagya:", error);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("maa ka bhosda:", error);
+    } finally {
+      setIsLoading(false);
     }
-    if (error) console.log("error aagya:", error);
   };
 
   const handleChange = (e: any) => {

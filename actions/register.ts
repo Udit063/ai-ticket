@@ -10,6 +10,7 @@ export const register = async (formData: AuthFormValues) => {
         data: {
           name: formData.name,
         },
+        emailRedirectTo: "http://localhost:3000/auth/callback",
       },
     });
 

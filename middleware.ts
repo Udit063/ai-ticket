@@ -21,6 +21,7 @@ export async function middleware(req: NextRequest) {
     "/reset-password",
     "/update-password",
     "/verify",
+    "/auth/callback",
   ];
 
   if (

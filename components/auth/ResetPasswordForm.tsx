@@ -56,16 +56,18 @@ export const ResetPasswordForm = () => {
     //   setIsLoading(false);
     // }
     try {
-      const { data, error } = await supabase.auth.resetPasswordForEmail(
-        values.email,
-        {
+      setIsLoading(true);
+      const { data, success, error } =
+        await supabase.auth.resetPasswordForEmail(values.email, {
           redirectTo: `http://localhost:3000/update-password`,
-        }
-      );
+        });
+      if (success) setEmailSent(true);
       console.log("gya mail", values.email);
       console.log("gya data", data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
