@@ -22,7 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogoutButton } from "./LogoutButton";
 
 export const Profile = () => {
-  const [profileImage, setProfileImage] = useState("/placeholder.svg");
+  const [profileImage, setProfileImage] = useState("/");
 
   //   const handleSave = () => {
   //     toast({
@@ -47,7 +47,7 @@ export const Profile = () => {
       <div className="flex items-center gap-3">
         <User className="h-8 w-8 text-primary" />
         <div>
-          <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-theme-purple to-theme-indigo bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
             Profile
           </h2>
           <p className="text-muted-foreground">

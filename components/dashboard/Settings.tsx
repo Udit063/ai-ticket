@@ -52,7 +52,7 @@ export const Settings = () => {
       <div className="flex items-center gap-3">
         <SettingsIcon className="h-8 w-8 text-primary" />
         <div>
-          <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-theme-purple to-theme-indigo bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
             Settings
           </h2>
           <p className="text-muted-foreground">

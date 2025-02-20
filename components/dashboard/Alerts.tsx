@@ -101,22 +101,10 @@ const getCategoryIcon = (category: string) => {
 };
 
 export const Alerts = () => {
-  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
+  // const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
+  const alerts = mockAlerts;
   const [filter, setFilter] = useState("all");
   const [dateRange, setDateRange] = useState("24h");
-
-  // Simulated real-time updates
-  //   useEffect(() => {
-  //     const interval = setInterval(() => {
-  //       toast({
-  //         title: "New Alert",
-  //         description: "High priority ticket requires attention",
-  //         duration: 3000,
-  //       });
-  //     }, 30000);
-
-  //     return () => clearInterval(interval);
-  //   }, [toast]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

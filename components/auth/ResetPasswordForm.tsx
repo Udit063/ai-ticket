@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { toast } from "sonner";
 import { AuthWrapper } from "@/components/auth/AuthWrapper";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,8 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { resetPassword } from "@/actions/resetPassword";
-import { supabase } from "@/lib/supabase";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -35,40 +32,12 @@ export const ResetPasswordForm = () => {
     },
   });
 
-  const onSubmit = async (values: FormValues) => {
-    // try {
-    //   setIsLoading(true);
-    //   const { success, error } = await resetPassword(values.email);
-
-    //   if (error) {
-    //     toast.error(error);
-    //     return;
-    //   }
-
-    //   if (success) {
-    //     setEmailSent(true);
-    //     toast.success("Reset link sent! Check your email inbox.");
-    //   }
-    // } catch (error) {
-    //   console.error("Reset password error:", error);
-    //   toast.error("Something went wrong. Please try again.");
-    // } finally {
-    //   setIsLoading(false);
-    // }
-    try {
-      setIsLoading(true);
-      const { data, success, error } =
-        await supabase.auth.resetPasswordForEmail(values.email, {
-          redirectTo: `http://localhost:3000/update-password`,
-        });
-      if (success) setEmailSent(true);
-      console.log("gya mail", values.email);
-      console.log("gya data", data);
-    } catch (error) {
-      console.log(error);
-    } finally {
+  const onSubmit = () => {
+    setIsLoading(true);
+    console.log("form submitted");
+    setTimeout(() => {
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   return (

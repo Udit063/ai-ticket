@@ -18,8 +18,6 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import "./ScrollbarHide.css";
 import { Filter } from "./Filter";
-import { User } from "@supabase/supabase-js";
-import { useEffect } from "react";
 import { TrendsSummary } from "./TrendSummary";
 import { BookOpenText } from "lucide-react";
 
@@ -59,10 +57,7 @@ const sentimentData = [
   { name: "Jun", positive: 92, neutral: 6, negative: 2 },
 ];
 
-export const Dashboard = ({ user }: { user: User }) => {
-  useEffect(() => {
-    console.log("user", user);
-  });
+export const Dashboard = () => {
   return (
     <div className="animate-fade-in">
       <div className="max-w-7xl mx-auto space-y-8">
