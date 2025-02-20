@@ -1,54 +1,59 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import {
+  createClientComponentClient,
+  User,
+} from "@supabase/auth-helpers-nextjs";
+import { pricingPlans } from "@/constants/pricingPlans";
 
 export const Pricing = () => {
   const router = useRouter();
-  const pricingPlans = [
-    {
-      name: "Free Tier",
-      price: "0",
-      description: "Perfect for getting started",
-      features: [
-        "Up to 100 tickets per month",
-        "Basic ticket summaries",
-        "Standard categorization",
-        "Simple QA analysis",
-        "Email support",
-        "Basic analytics dashboard",
-      ],
-      highlighted: false,
-      buttonText: "Get Started",
-    },
-    {
-      name: "Pro Plan",
-      price: "49",
-      period: "/month",
-      description: "For growing teams",
-      features: [
-        "Unlimited ticket processing",
-        "Advanced AI customization",
-        "Full historical data access",
-        "Enhanced insights & reporting",
-        "Priority support",
-        "Custom integration options",
-        "Advanced analytics",
-        "API access",
-      ],
-      highlighted: true,
-      buttonText: "Start Free Trial",
-    },
-  ];
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handlePayment = (planName: string) => {
-    router.push(`/payment?plan=${planName}`);
+  const supabase = createClientComponentClient();
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+        if (error) {
+          console.error("Auth error:", error);
+        }
+        if (session?.user) {
+          setUser(session?.user);
+        }
+      } catch (err) {
+        console.error("Failed to get session:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [supabase]);
+
+  const handlePlanSelect = async (plan: any) => {
+    if (plan.price === "0") {
+      router.push(plan.link);
+      return;
+    }
+
+    if (!user) {
+      router.push(`/login?redirectTo=${"/"}`);
+      return;
+    }
+
+    router.push(`${plan.link}?prefilled_email=${user.email}`);
   };
-
   return (
-    <div>
-      <section className="py-20 bg-gray-50" id="pricing">
+    <div id="pricing">
+      <div className="py-20 bg-gray-50" id="pricing">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -58,7 +63,7 @@ export const Pricing = () => {
               Choose the plan that best fits your needs
             </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8  mx-auto">
             {pricingPlans.map((plan, index) => (
               <div
                 key={index}
@@ -119,7 +124,7 @@ export const Pricing = () => {
                     ))}
                   </ul>
                   <Button
-                    onClick={() => handlePayment(plan.name)}
+                    onClick={() => handlePlanSelect(plan)}
                     className={`w-full h-12 ${
                       plan.highlighted
                         ? "bg-primary-500 hover:bg-primary-600 text-white"
@@ -133,7 +138,7 @@ export const Pricing = () => {
             ))}
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

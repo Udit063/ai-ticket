@@ -20,7 +20,7 @@ import Link from "next/link";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { importIntercomTickets } from "@/lib/intercom-api";
 // import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -43,26 +43,10 @@ export const Onboarding = () => {
   const isIntercomConnected = !!session?.accessToken;
 
   const handleImportTickets = async () => {
-    if (!session?.accessToken) {
-      console.error("No access token available");
-      return;
-    }
-
     setIsImporting(true);
-    setImportError(null);
-
-    try {
-      const tickets = await importIntercomTickets();
-      console.log("Imported tickets:", tickets);
-      router.push("/dashboard");
-    } catch (error) {
-      console.error("Import error:", error);
-      setImportError(
-        error instanceof Error ? error.message : "Failed to import tickets"
-      );
-    } finally {
-      setIsImporting(false);
-    }
+    setTimeout(() => {
+      redirect("/dashboard");
+    }, 2000);
   };
 
   return (

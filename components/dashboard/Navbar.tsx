@@ -12,8 +12,8 @@ import { Badge } from "../ui/badge";
 import Link from "next/link";
 import { LogoutButton } from "./LogoutButton";
 
-export function Navbar() {
-  const userPlan = "free";
+export function Navbar({ userData }) {
+  const userPlan = userData.subscription_status === "active" ? "pro" : "free";
   const ticketsUsed = 75;
   return (
     <div className="flex items-center px-4 py-3 border-b bg-white">
@@ -27,14 +27,16 @@ export function Navbar() {
           </Badge>
         )}
         {userPlan === "free" ? (
-          <Button
-            variant="outline"
-            size="sm"
-            className="text-purple-600 border-purple-600 hover:bg-purple-50"
-          >
-            <Zap className="w-3 h-3 mr-1" />
-            Upgrade to Pro
-          </Button>
+          <Link href="/#pricing">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-purple-600 border-purple-600 hover:bg-purple-50"
+            >
+              <Zap className="w-3 h-3 mr-1" />
+              Upgrade to Pro
+            </Button>
+          </Link>
         ) : (
           <Badge variant="secondary" className="bg-purple-100 text-purple-600">
             <Zap className="w-3 h-3 mr-1" />
