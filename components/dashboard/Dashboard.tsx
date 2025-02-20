@@ -20,6 +20,8 @@ import "./ScrollbarHide.css";
 import { Filter } from "./Filter";
 import { User } from "@supabase/supabase-js";
 import { useEffect } from "react";
+import { TrendsSummary } from "./TrendSummary";
+import { BookOpenText } from "lucide-react";
 
 const ticketTrendData = [
   { date: "2024-01", tickets: 950, resolved: 850 },
@@ -48,6 +50,15 @@ const teamData = [
   { name: "Design Team", value: 8 },
 ];
 
+const sentimentData = [
+  { name: "Jan", positive: 85, neutral: 10, negative: 5 },
+  { name: "Feb", positive: 80, neutral: 15, negative: 5 },
+  { name: "Mar", positive: 90, neutral: 7, negative: 3 },
+  { name: "Apr", positive: 82, neutral: 13, negative: 5 },
+  { name: "May", positive: 88, neutral: 9, negative: 3 },
+  { name: "Jun", positive: 92, neutral: 6, negative: 2 },
+];
+
 export const Dashboard = ({ user }: { user: User }) => {
   useEffect(() => {
     console.log("user", user);
@@ -57,7 +68,12 @@ export const Dashboard = ({ user }: { user: User }) => {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-4xl font-bold text-foreground">Overview</h1>
+            <div className="flex items-center gap-3">
+              <BookOpenText className="h-8 w-8 text-primary" />
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
+                Overview
+              </h1>
+            </div>
             <p className="text-muted-foreground">
               Overview of your support operations
             </p>
@@ -216,6 +232,26 @@ export const Dashboard = ({ user }: { user: User }) => {
             </CardContent>
           </Card>
         </div>
+        <div>
+          <Card className="bg-card/50 backdrop-blur-sm lg:col-span-2 rounded-md shadow-none">
+            <CardHeader>
+              <CardTitle>Sentiment Analysis</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={sentimentData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="positive" fill="#9761f4" />
+                  <Bar dataKey="negative" fill="#fc5fbb" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="rounded-md shadow-none">
@@ -359,6 +395,8 @@ export const Dashboard = ({ user }: { user: User }) => {
             </CardContent>
           </Card>
         </div>
+
+        <TrendsSummary />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="rounded-md shadow-none">

@@ -166,7 +166,7 @@ export const Alerts = () => {
           <div>
             <div className="flex items-center gap-3">
               <Bell className="h-8 w-8 text-primary" />
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-theme-purple to-theme-indigo bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold  bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent ">
                 Alerts
               </h1>
             </div>
@@ -174,7 +174,10 @@ export const Alerts = () => {
               Real-time notifications and critical issues
             </p>
           </div>
-          <Badge variant="outline" className="px-4 py-2">
+          <Badge
+            variant="outline"
+            className="px-4 py-2 rounded-full font-medium"
+          >
             {alerts.length} Active Alerts
           </Badge>
         </div>

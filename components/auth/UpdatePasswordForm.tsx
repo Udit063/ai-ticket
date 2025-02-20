@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 // import { updatePassword } from "@/actions/resetPassword";
 import { createClient } from "@supabase/supabase-js";
+import { updatePassword } from "@/actions/resetPassword";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -40,7 +41,11 @@ export const UpdatePasswordForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [isSessionValid, setIsSessionValid] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+
   const router = useRouter();
+
   const [data, setData] = useState<{
     password: string;
     confirmPassword: string;
@@ -112,50 +117,37 @@ export const UpdatePasswordForm = () => {
     },
   });
 
-  // const onSubmit = async (values: FormValues) => {
-  //   try {
-  //     setIsLoading(true);
+  const onSubmit = async (values: FormValues) => {
+    if (success) return;
 
-  //     const {
-  //       data: { session },
-  //       error: sessionError,
-  //     } = await supabase.auth.getSession();
+    try {
+      setIsLoading(true);
+      setError(null);
 
-  //     console.log("Client - Retrieved session:", session);
+      const { success, error: updateError } = await updatePassword(
+        "", // email is not needed, the session contains user info
+        values.password
+      );
 
-  //     if (sessionError || !session) {
-  //       console.error("No active session found", sessionError);
-  //       toast.error(
-  //         "Authentication session not found. Try requesting a new reset link."
-  //       );
-  //       return;
-  //     }
+      if (updateError) {
+        console.error("Update error:", updateError);
+        setError(updateError);
+        return;
+      }
 
-  //     console.log("Client - Submitting with session:", session.user.id);
-  //     console.log("session: ", session);
-
-  //     const { success, error: updateError } = await updatePassword(
-  //       values.password
-  //     );
-
-  //     if (updateError) {
-  //       console.error("Update error:", updateError);
-  //       return;
-  //     }
-
-  //     if (success) {
-  //       toast.success("Password updated successfully!");
-  //       setTimeout(() => {
-  //         router.push("/login");
-  //       }, 2000);
-  //     }
-  //   } catch (error) {
-  //     console.error("Update password error:", error);
-  //     toast.error("Something went wrong. Please try again.");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+      if (success) {
+        setSuccess(true);
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Update password error:", error);
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const confirmPasswords = async () => {
     try {
@@ -163,9 +155,16 @@ export const UpdatePasswordForm = () => {
       const { password, confirmPassword } = data;
       if (password !== confirmPassword)
         return alert("Your passwords are incorrect");
+
       const { data: resetData, error } = await supabase.auth.updateUser({
-        password: data.password,
+        password: password,
       });
+
+      if (error) {
+        console.error("Error updating password:", error);
+        alert(`Failed to update password: ${error.message || error}`);
+        return;
+      }
 
       if (resetData) {
         console.log("resetData:", resetData);
@@ -178,14 +177,6 @@ export const UpdatePasswordForm = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setData((prev: any) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
   return (
