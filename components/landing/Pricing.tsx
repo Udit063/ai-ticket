@@ -1,12 +1,15 @@
+"use client";
 import React from "react";
 import { Button } from "../ui/button";
 import { CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const Pricing = () => {
+  const router = useRouter();
   const pricingPlans = [
     {
       name: "Free Tier",
-      price: "$0",
+      price: "0",
       description: "Perfect for getting started",
       features: [
         "Up to 100 tickets per month",
@@ -21,7 +24,7 @@ export const Pricing = () => {
     },
     {
       name: "Pro Plan",
-      price: "$49",
+      price: "49",
       period: "/month",
       description: "For growing teams",
       features: [
@@ -38,6 +41,11 @@ export const Pricing = () => {
       buttonText: "Start Free Trial",
     },
   ];
+
+  const handlePayment = (planName: string) => {
+    router.push(`/payment?plan=${planName}`);
+  };
+
   return (
     <div>
       <section className="py-20 bg-gray-50" id="pricing">
@@ -77,7 +85,7 @@ export const Pricing = () => {
                       plan.highlighted ? "text-white" : "text-gray-900"
                     }`}
                   >
-                    {plan.price}
+                    ${plan.price}
                     {plan.period && (
                       <span className="text-lg font-normal text-gray-400">
                         {plan.period}
@@ -111,6 +119,7 @@ export const Pricing = () => {
                     ))}
                   </ul>
                   <Button
+                    onClick={() => handlePayment(plan.name)}
                     className={`w-full h-12 ${
                       plan.highlighted
                         ? "bg-primary-500 hover:bg-primary-600 text-white"

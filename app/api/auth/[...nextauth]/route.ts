@@ -5,8 +5,8 @@ import type { NextAuthOptions } from "next-auth";
 export const authOptions: NextAuthOptions = {
   providers: [
     IntercomProvider({
-      clientId: process.env.INTERCOM_CLIENT_ID!,
-      clientSecret: process.env.INTERCOM_CLIENT_SECRET!,
+      clientId: process.env.NEXT_PUBLIC_INTERCOM_CLIENT_ID!,
+      clientSecret: process.env.NEXT_PUBLIC_INTERCOM_CLIENT_SECRET!,
     }),
   ],
   callbacks: {

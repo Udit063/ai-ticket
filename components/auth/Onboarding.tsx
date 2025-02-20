@@ -21,11 +21,8 @@ import { ArrowLeft, CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {
-  getIntercomWorkspaceInfo,
-  importIntercomTickets,
-} from "@/lib/intercom-api";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { importIntercomTickets } from "@/lib/intercom-api";
+// import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const Onboarding = () => {
   const [timeRange, setTimeRange] = useState("1");
@@ -36,7 +33,7 @@ export const Onboarding = () => {
 
   const { data: session } = useSession();
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  // const supabase = createClientComponentClient();
 
   const handleConnectIntercom = async () => {
     setIsConnecting(true);
