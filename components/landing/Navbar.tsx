@@ -36,12 +36,7 @@ export const Navbar = () => {
               >
                 Pricing
               </a>
-              <a
-                href="#testimonials"
-                className="text-gray-600 hover:text-primary-600 transition-colors"
-              >
-                Testimonials
-              </a>
+
               <Link href="/login">
                 <Button
                   variant="ghost"
@@ -50,9 +45,11 @@ export const Navbar = () => {
                   Sign In
                 </Button>
               </Link>
-              <Button className="bg-primary-500 hover:bg-primary-600 text-white">
-                Get Started
-              </Button>
+              <Link href="/register">
+                <Button className="bg-primary-500 hover:bg-primary-600 text-white">
+                  Get Started
+                </Button>
+              </Link>
             </div>
 
             <button

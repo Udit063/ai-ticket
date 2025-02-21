@@ -25,7 +25,9 @@ export const TicketVolumeTrends = () => {
     <div>
       <Card className="rounded-md shadow-none">
         <CardHeader>
-          <CardTitle>Ticket Volume Trends</CardTitle>
+          <CardTitle className="text-lg bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+            Ticket Volume Trends
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="relative">

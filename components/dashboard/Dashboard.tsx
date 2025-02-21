@@ -7,9 +7,6 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
-  Area,
-  Legend,
-  AreaChart,
   LabelList,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -124,7 +121,9 @@ export const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="rounded-md shadow-none">
             <CardHeader>
-              <CardTitle>Ticket Categories</CardTitle>
+              <CardTitle className="text-lg bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+                Ticket Categories
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="relative">
@@ -194,7 +193,9 @@ export const Dashboard = () => {
           </Card>
           <Card className="rounded-md shadow-none">
             <CardHeader>
-              <CardTitle>Teams/User Assigned</CardTitle>
+              <CardTitle className="text-lg bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+                Teams/User Assigned
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="relative">
@@ -273,7 +274,7 @@ export const Dashboard = () => {
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Recent Tickets</CardTitle>
               <Button variant="outline" size="sm" asChild>
-                <Link href="/tickets">View All</Link>
+                <Link href="/dashboard/tickets">View All</Link>
               </Button>
             </CardHeader>
             <CardContent>
@@ -334,7 +335,7 @@ export const Dashboard = () => {
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Recent Alerts</CardTitle>
               <Button variant="outline" size="sm" asChild>
-                <Link href="/tickets">View All</Link>
+                <Link href="/dashboard/alerts">View All</Link>
               </Button>
             </CardHeader>
             <CardContent>

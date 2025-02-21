@@ -101,7 +101,6 @@ const getCategoryIcon = (category: string) => {
 };
 
 export const Alerts = () => {
-  // const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
   const alerts = mockAlerts;
   const [filter, setFilter] = useState("all");
   const [dateRange, setDateRange] = useState("24h");
@@ -177,7 +176,7 @@ export const Alerts = () => {
                 <SelectValue placeholder="Filter by severity" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Severities</SelectItem>
+                <SelectItem value="all">All</SelectItem>
                 <SelectItem value="high">High Priority</SelectItem>
                 <SelectItem value="medium">Medium Priority</SelectItem>
                 <SelectItem value="low">Low Priority</SelectItem>

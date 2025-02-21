@@ -202,25 +202,6 @@ function SupportManagerReport() {
               <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
                 <li>{item.topic}</li>{" "}
               </ul>
-
-              <div className="flex items-center gap-2">
-                <span className="font-medium">{item.volume}</span>
-                <span
-                  className={
-                    item.trend === "increasing"
-                      ? "text-green-600"
-                      : item.trend === "decreasing"
-                      ? "text-red-600"
-                      : "text-muted-foreground"
-                  }
-                >
-                  {item.trend === "increasing"
-                    ? "↑"
-                    : item.trend === "decreasing"
-                    ? "↓"
-                    : "→"}
-                </span>
-              </div>
             </div>
           ))}
         </div>
@@ -265,7 +246,6 @@ function ProductTeamReport() {
                 <li>{item.feature}</li>
               </ul>
               <div className="flex items-center gap-2">
-                <span className="font-medium">{item.votes} votes</span>
                 <span
                   className={`px-2 py-0.5 rounded-full text-xs ${
                     item.status === "In Progress"
