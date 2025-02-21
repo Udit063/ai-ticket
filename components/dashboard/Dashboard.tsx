@@ -20,15 +20,8 @@ import "./ScrollbarHide.css";
 import { Filter } from "./Filter";
 import { TrendsSummary } from "./TrendSummary";
 import { BookOpenText } from "lucide-react";
-
-const ticketTrendData = [
-  { date: "2024-01", tickets: 950, resolved: 850 },
-  { date: "2024-02", tickets: 1200, resolved: 1000 },
-  { date: "2024-03", tickets: 1200, resolved: 1250 },
-  { date: "2024-04", tickets: 1000, resolved: 1400 },
-  { date: "2024-05", tickets: 1200, resolved: 1100 },
-  { date: "2024-06", tickets: 1300, resolved: 1200 },
-];
+import { SentimentAnalysis } from "./SentimentAnalysis";
+import { TicketVolumeTrends } from "./TicketVolumeTrends";
 
 const categoryData = [
   { name: "Technical Issues", value: 35 },
@@ -46,15 +39,6 @@ const teamData = [
   { name: "Cloud Team", value: 14 },
   { name: "Product Management", value: 10 },
   { name: "Design Team", value: 8 },
-];
-
-const sentimentData = [
-  { name: "Jan", positive: 85, neutral: 10, negative: 5 },
-  { name: "Feb", positive: 80, neutral: 15, negative: 5 },
-  { name: "Mar", positive: 90, neutral: 7, negative: 3 },
-  { name: "Apr", positive: 82, neutral: 13, negative: 5 },
-  { name: "May", positive: 88, neutral: 9, negative: 3 },
-  { name: "Jun", positive: 92, neutral: 6, negative: 2 },
 ];
 
 export const Dashboard = () => {
@@ -135,118 +119,7 @@ export const Dashboard = () => {
           </Card>
         </div>
 
-        <div>
-          <Card className="rounded-md shadow-none">
-            <CardHeader>
-              <CardTitle>Ticket Volume Trends</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="relative">
-                <div className="overflow-x-auto scrollbar-hide">
-                  <div
-                    style={{
-                      width: `${ticketTrendData.length * 100}px`,
-                      minWidth: "100%",
-                    }}
-                  >
-                    <ResponsiveContainer width="100%" height={300}>
-                      <AreaChart data={ticketTrendData}>
-                        <CartesianGrid strokeDasharray="3 3" opacity={0.5} />
-                        <XAxis dataKey="date" />
-                        <YAxis />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: "white",
-                            border: "none",
-                            boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                            borderRadius: "0.5rem",
-                          }}
-                        />
-                        <defs>
-                          <linearGradient
-                            id="ticketsGradient"
-                            x1="0"
-                            y1="0"
-                            x2="0"
-                            y2="1"
-                          >
-                            <stop
-                              offset="5%"
-                              stopColor="#7c3aed"
-                              stopOpacity={0.8}
-                            />
-                            <stop
-                              offset="95%"
-                              stopColor="#7c3aed"
-                              stopOpacity={0.1}
-                            />
-                          </linearGradient>
-                          <linearGradient
-                            id="resolvedGradient"
-                            x1="0"
-                            y1="0"
-                            x2="0"
-                            y2="1"
-                          >
-                            <stop
-                              offset="5%"
-                              stopColor="#a78bfa"
-                              stopOpacity={0.8}
-                            />
-                            <stop
-                              offset="95%"
-                              stopColor="#a78bfa"
-                              stopOpacity={0.1}
-                            />
-                          </linearGradient>
-                        </defs>
-                        <Area
-                          type="monotone"
-                          dataKey="tickets"
-                          name="Total Tickets"
-                          stroke="#7c3aed"
-                          fill="url(#ticketsGradient)"
-                          fillOpacity={0.4}
-                          strokeWidth={2}
-                        />
-                        <Area
-                          type="monotone"
-                          dataKey="resolved"
-                          name="Resolved"
-                          stroke="#a78bfa"
-                          fill="url(#resolvedGradient)"
-                          fillOpacity={0.4}
-                          strokeWidth={2}
-                        />
-                        <Legend />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        <div>
-          <Card className="bg-card/50 backdrop-blur-sm lg:col-span-2 rounded-md shadow-none">
-            <CardHeader>
-              <CardTitle>Sentiment Analysis</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={sentimentData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="positive" fill="#9761f4" />
-                  <Bar dataKey="negative" fill="#fc5fbb" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </div>
+        <TicketVolumeTrends />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="rounded-md shadow-none">
@@ -390,6 +263,8 @@ export const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        <SentimentAnalysis />
 
         <TrendsSummary />
 
