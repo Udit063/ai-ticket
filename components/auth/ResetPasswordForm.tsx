@@ -14,6 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { sendResetPasswordEmail } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -22,6 +24,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export const ResetPasswordForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
 
@@ -32,12 +35,24 @@ export const ResetPasswordForm = () => {
     },
   });
 
-  const onSubmit = () => {
-    setIsLoading(true);
-    console.log("form submitted");
-    setTimeout(() => {
+  const onSubmit = async (values: FormValues) => {
+    try {
+      setIsLoading(true);
+      const { success, error } = await sendResetPasswordEmail(values.email);
+
+      if (error) {
+        console.log("error", error);
+        return;
+      }
+
+      if (success) console.log("hogya");
+
+      router.push("/verify");
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (

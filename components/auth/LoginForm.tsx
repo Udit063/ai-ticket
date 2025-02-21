@@ -15,6 +15,8 @@ import Link from "next/link";
 import * as z from "zod";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signinWithEmailPassword } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,6 +26,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export const LoginForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormValues>({
@@ -34,12 +37,27 @@ export const LoginForm = () => {
     },
   });
 
-  const onSubmit = () => {
-    setIsLoading(true);
-    console.log("Form submitted");
-    setTimeout(() => {
+  const onSubmit = async (values: FormValues) => {
+    try {
+      setIsLoading(true);
+      const { success, error } = await signinWithEmailPassword(
+        values.email,
+        values.password
+      );
+
+      if (error) {
+        console.log("error", error);
+        return { error: error };
+      }
+
+      if (success) console.log("hogya");
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (

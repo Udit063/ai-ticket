@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { updatePassword } from "@/actions/auth";
 
 const formSchema = z
   .object({
@@ -43,13 +44,23 @@ export const UpdatePasswordForm = () => {
     },
   });
 
-  const confirmPasswords = () => {
-    setIsLoading(true);
-    setError(null);
-    console.log("confirmPasswords");
-    setTimeout(() => {
+  const onSubmit = async (values: FormValues) => {
+    try {
+      setIsLoading(true);
+      const { success, error } = await updatePassword(values.password);
+
+      if (error) {
+        return;
+      }
+
+      if (success) console.log("hogya");
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -74,7 +85,7 @@ export const UpdatePasswordForm = () => {
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={confirmPasswords} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
                 name="password"
