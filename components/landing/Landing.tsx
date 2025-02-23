@@ -1,4 +1,4 @@
-import { Lightbulb, TrendingUp, Brain } from "lucide-react";
+import { Lightbulb, TrendingUp, Brain, SparklesIcon } from "lucide-react";
 import { Navbar } from "./Navbar";
 import { HeroSection } from "./HeroSection";
 import { CTA } from "./CTA";
@@ -47,6 +47,12 @@ export const LandingPage = () => {
       <div className=" bg-white py-20">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center mb-12 animate-fade-up">
+            <div className="inline-flex items-center gap-2 bg-purple-50 rounded-full px-4 py-2 mb-6">
+              <SparklesIcon className="w-5 h-5 text-purple-600" />
+              <span className="text-sm font-medium text-purple-600">
+                Integrations
+              </span>
+            </div>
             <h2 className="text-5xl font-bold text-gray-900 mb-4">
               <span className="text-primary-600">Seamless Integration</span>{" "}
               with Your Tools
@@ -104,6 +110,12 @@ export const LandingPage = () => {
       <section id="features" className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-purple-50 rounded-full px-4 py-2 mb-6">
+              <SparklesIcon className="w-5 h-5 text-purple-600" />
+              <span className="text-sm font-medium text-purple-600">
+                Features
+              </span>
+            </div>
             <h2 className="text-5xl font-bold text-gray-900 mb-4">
               <span className="text-primary-600">Powerful Features</span> for
               Modern Support Teams

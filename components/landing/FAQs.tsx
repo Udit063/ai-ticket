@@ -1,3 +1,5 @@
+import { SparklesIcon } from "lucide-react";
+
 export const FAQ = () => {
   const faqs = [
     {
@@ -31,6 +33,10 @@ export const FAQ = () => {
     <section id="questions" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-purple-50 rounded-full px-4 py-2 mb-6">
+            <SparklesIcon className="w-5 h-5 text-purple-600" />
+            <span className="text-sm font-medium text-purple-600">FAQs</span>
+          </div>{" "}
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Frequently Asked Questions
           </h2>

@@ -1,10 +1,16 @@
-import { StarIcon } from "lucide-react";
+import { SparklesIcon, StarIcon } from "lucide-react";
 
 export const Testimonials = () => {
   return (
     <section className="py-28 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 bg-purple-50 rounded-full px-4 py-2 mb-6">
+            <SparklesIcon className="w-5 h-5 text-purple-600" />
+            <span className="text-sm font-medium text-purple-600">
+              Testimonials
+            </span>
+          </div>
           <h2 className="text-5xl font-bold mb-4">
             <span className="text-primary-600">Loved</span> by Support Teams
           </h2>
