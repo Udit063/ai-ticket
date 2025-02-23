@@ -3,20 +3,34 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { LogOut } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { logout } from "@/actions/logout";
 
 interface LogoutButtonProp {
   className?: string;
 }
 
 export const LogoutButton = ({ className }: LogoutButtonProp) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogout = async () => {
-    setIsLoading(true);
-    console.log("logout");
-    setTimeout(() => {
+    try {
+      setIsLoading(true);
+      const { error } = await logout();
+
+      if (error) {
+        console.log(error);
+
+        return;
+      }
+
+      router.push("/login");
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
   return (
     <Button

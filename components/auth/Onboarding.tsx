@@ -18,7 +18,7 @@ import {
 } from "../ui/select";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
@@ -31,6 +31,7 @@ export const Onboarding = () => {
   const [timeRange, setTimeRange] = useState("1");
   const [isConnecting, setIsConnecting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [connected, setConnected] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("");
   const [importStatus, setImportStatus] = useState<{
     completed: boolean;
@@ -38,13 +39,45 @@ export const Onboarding = () => {
     error?: string;
   } | null>(null);
 
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("success") === "intercom_connected") {
+      setConnected(true);
+      updateDatabaseConnectionStatus();
+    }
+  }, []);
+
+  const updateDatabaseConnectionStatus = async () => {
+    if (!session?.user) return;
+
+    const { error } = await supabase
+      .from("users")
+      .update({
+        is_intercom_connected: true,
+      })
+      .eq("id", session.user.id);
+
+    if (error) {
+      console.error("Error updating connection status:", error);
+    }
+  };
+
   const { data: session } = useSession();
   const router = useRouter();
   const supabase = createClientComponentClient();
 
   const handleConnectIntercom = async () => {
     setIsConnecting(true);
-    await signIn("intercom", { callbackUrl: "/onboarding", redirect: true });
+    const result = await signIn("intercom", {
+      callbackUrl: "/onboarding",
+      redirect: true,
+    });
+
+    if (result?.error) {
+      console.error("Error connecting to Intercom:", result.error);
+    } else {
+      router.push("/onboarding");
+    }
   };
 
   const handleImportTickets = async () => {
@@ -117,7 +150,7 @@ export const Onboarding = () => {
     }
   };
 
-  const isIntercomConnected = !!session?.accessToken;
+  const isIntercomConnected = connected;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -133,14 +166,14 @@ export const Onboarding = () => {
         <CardContent className="space-y-6">
           {isIntercomConnected ? (
             <>
-              <div className="p-4 bg-green-50 rounded-md flex items-center space-x-2">
+              <div className="p-4 mb-6 bg-green-50 rounded-md flex items-center space-x-2">
                 <CheckCircle className="h-5 w-5 text-green-500" />
                 <span className="text-green-700 font-medium">
                   Connected to {workspaceName || "Intercom"}
                 </span>
               </div>
 
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label className="text-sm font-medium">Import Time Range</Label>
                 <Select
                   defaultValue="1"
@@ -181,7 +214,14 @@ export const Onboarding = () => {
                     </p>
                   )}
                 </div>
-              )}
+              )} */}
+
+              <Link href="/dashboard">
+                {" "}
+                <Button className="w-full h-12 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg">
+                  Go to dashboard
+                </Button>
+              </Link>
             </>
           ) : (
             <>
@@ -213,7 +253,7 @@ export const Onboarding = () => {
             </>
           )}
 
-          <Link href="/register">
+          {/* <Link href="/register">
             <Button
               variant="outline"
               className="w-full h-12 hover:bg-gray-50 border-gray-200 shadow-sm transition-all duration-300"
@@ -221,7 +261,7 @@ export const Onboarding = () => {
               <ArrowLeft className="mr-2 h-4 w-4" />
               Go Back
             </Button>
-          </Link>
+          </Link> */}
         </CardContent>
       </Card>
     </div>
