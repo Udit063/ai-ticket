@@ -1,14 +1,13 @@
 import { supabase } from "@/lib/supabase";
-import { AuthFormValues } from "@/types";
 
-export const register = async (formData: AuthFormValues) => {
+export const register = async (email: string, password: string) => {
   try {
     const { data, error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
+      email: email,
+      password: password,
       options: {
         data: {
-          name: formData.name,
+          name: name,
         },
         emailRedirectTo: "http://localhost:3000/auth/callback",
       },

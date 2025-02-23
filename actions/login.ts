@@ -1,13 +1,10 @@
 import { supabase } from "@/lib/supabase";
-import { AuthFormValues } from "@/types";
 
-export const login = async (
-  formData: Pick<AuthFormValues, "email" | "password">
-) => {
+export const login = async (email: string, password: string) => {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password,
+      email: email,
+      password: password,
     });
 
     if (error) {

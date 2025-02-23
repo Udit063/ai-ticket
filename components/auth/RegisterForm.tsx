@@ -42,7 +42,7 @@ export const RegisterForm = () => {
   const onSubmit = async (values: FormValues) => {
     try {
       setIsLoading(true);
-      const { data, error } = await register(values);
+      const { data, error } = await register(values.email, values.password);
 
       if (error) {
         return;

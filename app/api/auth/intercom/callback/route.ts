@@ -5,7 +5,8 @@ import axios from "axios";
 
 export async function GET(request: NextRequest) {
   // Use cookies() directly without awaiting
-  const supabase = createRouteHandlerClient({ cookies: cookies() });
+  const cookieFunction = async () => cookies();
+  const supabase = createRouteHandlerClient({ cookies: cookieFunction });
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
 

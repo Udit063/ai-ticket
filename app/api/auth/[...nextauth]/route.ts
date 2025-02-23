@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import IntercomProvider from "@/lib/intercom_provider";
 
-export const authOptions = {
+const authOptions = {
   providers: [
     IntercomProvider({
       clientId: process.env.NEXT_PUBLIC_INTERCOM_CLIENT_ID!,

@@ -40,7 +40,7 @@ export const LoginForm = () => {
   const onSubmit = async (values: FormValues) => {
     try {
       setIsLoading(true);
-      const { data, error } = await login(values);
+      const { data, error } = await login(values.email, values.password);
 
       if (error) {
         return;
