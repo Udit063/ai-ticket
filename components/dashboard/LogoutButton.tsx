@@ -2,8 +2,8 @@
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { logout } from "@/actions/logout";
 
 interface LogoutButtonProp {

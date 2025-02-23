@@ -23,7 +23,7 @@ export default async function DashboardPage() {
   }
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <DynamicDashboard user={session.user} />
+      <DynamicDashboard />
     </Suspense>
   );
 }

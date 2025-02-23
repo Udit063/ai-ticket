@@ -1,48 +1,94 @@
-import { ArrowRight, CheckCircle2, Zap } from "lucide-react";
+import { CheckCircle2, Zap } from "lucide-react";
 import React from "react";
-import { Button } from "../ui/button";
+import { GetStartedButton } from "./GetStartedButton";
+import { FloatingImage } from "./FloatingImage";
 
 export const HeroSection = () => {
+  const images = [
+    {
+      src: "/assets/images/slack.png",
+      alt: "Slack Icon",
+      position: "left-0 top-64 md:-left-10",
+      delay: 0,
+      cropPosition: "object-left-top",
+    },
+    {
+      src: "/assets/images/intercom.png",
+      alt: "intercom Icon",
+      position: " top-64 md:-right-10",
+      delay: 1,
+      cropPosition: "object-right-top",
+    },
+    {
+      src: "/assets/images/zendesk.png",
+      alt: "zendesk Icon",
+      position: "bottom-20 left-[10%]",
+      delay: 2,
+      cropPosition: "object-left-bottom",
+    },
+    {
+      src: "/assets/images/fleshdesk.png",
+      alt: "fleshdesk Icon",
+      position: "right-[10%] bottom-20",
+      delay: 3,
+      cropPosition: "object-right-bottom",
+    },
+  ];
   return (
     <div>
-      <section className=" py-20 md:pt-40 md:pb-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+      <section className=" py-20 pt-40 md:pb-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+        <div className="absolute blur-blob bg-purple-200 top-0 left-[35%] w-[500px] h-[500px]" />
+
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="animate-fade-up">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 text-primary-600 text-sm font-medium mb-8">
-                <Zap className="w-4 h-4" />
-                <span>Revolutionizing Customer Support</span>
-              </div>
-              <h1 className="text-4xl md:text-7xl font-bold mb-8 text-gray-900 leading-tight">
-                Support Smarter with
-                <span className="text-primary-600"> AI-Powered Insights</span>
-              </h1>
-              <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-                Transform your customer support with AI that analyzes,
-                categorizes, and prioritizes tickets automatically. Reduce
-                response times and improve satisfaction.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-                <Button
-                  size="sm"
-                  className="bg-primary-600 hover:bg-primary-600 shadow-xl hover:-translate-y-1 transition-all ease-in-out duration-300 text-white px-8 h-14 text-lg group"
-                >
-                  Start Free Trial
-                  <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-all ease-in-out duration-300" />
-                </Button>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-8 justify-center items-center text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-green-500" />
-                  <span>No credit card required</span>
+          <div className=" flex flex-col items-center justify-center text-center space-y-8">
+            <div className="max-w-4xl mx-auto text-center justify-center relative">
+              {images.map((image, index) => (
+                <FloatingImage
+                  key={index}
+                  src={image.src}
+                  alt={image.alt}
+                  className={image.position}
+                  delay={image.delay}
+                  cropPosition={image.cropPosition}
+                />
+              ))}
+              <div className="animate-fade-up">
+                <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 mb-8 shadow-md text-primary-600">
+                  <Zap className="w-4 h-4" />
+                  <span>Revolutionizing Customer Support</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-green-500" />
-                  <span>14-day free trial</span>
+                <h1 className="text-4xl md:text-7xl font-bold mb-8 text-gray-900 leading-tight">
+                  Support Smarter with
+                  <span className="text-primary-600 block">
+                    {" "}
+                    AI-Powered Insights
+                  </span>
+                </h1>
+                <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+                  Transform your customer support with AI that analyzes,
+                  categorizes, and prioritizes tickets automatically. Reduce
+                  response times and improve satisfaction.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+                  <GetStartedButton
+                    content="Start Free Trial"
+                    className="py-7 px-4 md:px-12"
+                    icon={true}
+                  />
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-green-500" />
-                  <span>Cancel anytime</span>
+                <div className="flex flex-col sm:flex-row gap-8 justify-center items-center text-sm text-gray-500">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>No credit card required</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>14-day free trial</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>Cancel anytime</span>
+                  </div>
                 </div>
               </div>
             </div>

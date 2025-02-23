@@ -7,7 +7,6 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import Link from "next/link";
-import type React from "react"; // Import React
 
 interface AuthWrapperProps {
   children: React.ReactNode;

@@ -2,14 +2,14 @@
 import { Menu, MessageSquare, X } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
-import { Button } from "../ui/button";
+import { GetStartedButton } from "./GetStartedButton";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div>
-      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-b border-gray-100 z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-white/50 backdrop-blur-xl border-b border-gray-100 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center">
@@ -37,22 +37,21 @@ export const Navbar = () => {
                 Pricing
               </a>
               <a
-                href="#testimonials"
+                href="#questions"
                 className="text-gray-600 hover:text-primary-600 transition-colors"
               >
-                Testimonials
+                FAQs
               </a>
-              <Link href="/login">
-                <Button
-                  variant="ghost"
-                  className="text-gray-600 hover:text-primary-600"
-                >
-                  Sign In
+              {/* </div>
+            <div className="hidden md:flex items-center gap-8"> */}
+              {/* <Link href="/register">
+                <Button className="bg-primary-500 hover:bg-primary-600 text-white">
+                  Get Started
                 </Button>
+              </Link> */}
+              <Link href="/register">
+                <GetStartedButton content="Get Started" />
               </Link>
-              <Button className="bg-primary-500 hover:bg-primary-600 text-white">
-                Get Started
-              </Button>
             </div>
 
             <button

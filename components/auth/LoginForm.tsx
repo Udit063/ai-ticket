@@ -12,16 +12,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { useState } from "react";
-import { login } from "@/actions/login";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { login } from "@/actions/login";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -44,17 +43,13 @@ export const LoginForm = () => {
       const { data, error } = await login(values);
 
       if (error) {
-        toast.error("login failed");
         return;
       }
       if (data) console.log("login hogya", data);
 
-      toast.success("Logged in successfully!");
       router.push("/dashboard");
     } catch (error) {
       console.log("nhi hua", error);
-
-      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }

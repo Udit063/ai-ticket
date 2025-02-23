@@ -101,22 +101,9 @@ const getCategoryIcon = (category: string) => {
 };
 
 export const Alerts = () => {
-  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
+  const alerts = mockAlerts;
   const [filter, setFilter] = useState("all");
   const [dateRange, setDateRange] = useState("24h");
-
-  // Simulated real-time updates
-  //   useEffect(() => {
-  //     const interval = setInterval(() => {
-  //       toast({
-  //         title: "New Alert",
-  //         description: "High priority ticket requires attention",
-  //         duration: 3000,
-  //       });
-  //     }, 30000);
-
-  //     return () => clearInterval(interval);
-  //   }, [toast]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -166,7 +153,7 @@ export const Alerts = () => {
           <div>
             <div className="flex items-center gap-3">
               <Bell className="h-8 w-8 text-primary" />
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-theme-purple to-theme-indigo bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold  bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent ">
                 Alerts
               </h1>
             </div>
@@ -174,7 +161,10 @@ export const Alerts = () => {
               Real-time notifications and critical issues
             </p>
           </div>
-          <Badge variant="outline" className="px-4 py-2">
+          <Badge
+            variant="outline"
+            className="px-4 py-2 rounded-full font-medium"
+          >
             {alerts.length} Active Alerts
           </Badge>
         </div>
@@ -186,7 +176,7 @@ export const Alerts = () => {
                 <SelectValue placeholder="Filter by severity" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Severities</SelectItem>
+                <SelectItem value="all">All</SelectItem>
                 <SelectItem value="high">High Priority</SelectItem>
                 <SelectItem value="medium">Medium Priority</SelectItem>
                 <SelectItem value="low">Low Priority</SelectItem>
