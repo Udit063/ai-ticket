@@ -42,14 +42,16 @@ export const Navbar = () => {
               >
                 FAQs
               </a>
-            </div>
-            <div className="hidden md:flex items-center gap-8">
+              {/* </div>
+            <div className="hidden md:flex items-center gap-8"> */}
               {/* <Link href="/register">
                 <Button className="bg-primary-500 hover:bg-primary-600 text-white">
                   Get Started
                 </Button>
               </Link> */}
-              <GetStartedButton content="Get Started" />
+              <Link href="/register">
+                <GetStartedButton content="Get Started" />
+              </Link>
             </div>
 
             <button

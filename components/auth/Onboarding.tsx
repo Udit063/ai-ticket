@@ -17,20 +17,107 @@ import {
   SelectValue,
 } from "../ui/select";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCircle } from "lucide-react";
 import { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import {
+  getIntercomWorkspaceInfo,
+  importIntercomTickets,
+} from "@/lib/intercom-api";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const Onboarding = () => {
   const [timeRange, setTimeRange] = useState("1");
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+  const [workspaceName, setWorkspaceName] = useState("");
+  const [importStatus, setImportStatus] = useState<{
+    completed: boolean;
+    ticketsCount: number;
+    error?: string;
+  } | null>(null);
 
-  const connectIntercom = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const supabase = createClientComponentClient();
+
+  const handleConnectIntercom = async () => {
     setIsConnecting(true);
-    console.log("Connecting Intercom", timeRange);
-    setTimeout(() => {
-      setIsConnecting(false);
-    }, 1000);
+    await signIn("intercom", { callbackUrl: "/onboarding", redirect: true });
   };
+
+  const handleImportTickets = async () => {
+    if (!session?.accessToken) {
+      return;
+    }
+
+    setIsImporting(true);
+
+    try {
+      console.log("start hua");
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      console.log("user bhi mil gya", user);
+
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+
+      const workspace = await getIntercomWorkspaceInfo(session.accessToken);
+      setWorkspaceName(workspace.name);
+
+      const result = await importIntercomTickets(
+        session.accessToken,
+        parseInt(timeRange),
+        user.id
+      );
+      console.log("yahan bhi aagya");
+
+      if (result.completed) {
+        console.log("result chl gya");
+
+        setImportStatus({
+          completed: true,
+          ticketsCount: result.ticketsImported,
+          error: undefined,
+        });
+
+        // Update user profile to mark onboarding as complete
+        await supabase.from("users").upsert({
+          id: user.id,
+          onboarding_completed: true,
+          intercom_connected: true,
+          intercom_workspace: workspace.name,
+          intercom_account_id: session.providerAccountId,
+        });
+        console.log("hogya bc");
+
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 2000);
+      } else {
+        setImportStatus({
+          completed: false,
+          ticketsCount: 0,
+          error: result.error,
+        });
+      }
+    } catch (error) {
+      console.error("Import error:", error);
+      setImportStatus({
+        completed: false,
+        ticketsCount: 0,
+        error: "Failed to import tickets",
+      });
+    } finally {
+      setIsImporting(false);
+    }
+  };
+
+  const isIntercomConnected = !!session?.accessToken;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -44,31 +131,87 @@ export const Onboarding = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Import Time Range</Label>
-            <Select
-              defaultValue="1"
-              onValueChange={(value) => setTimeRange(value)}
-            >
-              <SelectTrigger className="h-12 bg-gray-50/50">
-                <SelectValue placeholder="Select time range" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">Last 1 month</SelectItem>
-                <SelectItem value="3">Last 3 months</SelectItem>
-                <SelectItem value="6">Last 6 months</SelectItem>
-                <SelectItem value="12">Last 12 months</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {isIntercomConnected ? (
+            <>
+              <div className="p-4 bg-green-50 rounded-md flex items-center space-x-2">
+                <CheckCircle className="h-5 w-5 text-green-500" />
+                <span className="text-green-700 font-medium">
+                  Connected to {workspaceName || "Intercom"}
+                </span>
+              </div>
 
-          <Button
-            onClick={connectIntercom}
-            className="w-full h-12 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg"
-            disabled={isConnecting}
-          >
-            {isConnecting ? "Connecting..." : "Connect Intercom"}
-          </Button>
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Import Time Range</Label>
+                <Select
+                  defaultValue="1"
+                  onValueChange={(value) => setTimeRange(value)}
+                >
+                  <SelectTrigger className="h-12 bg-gray-50/50">
+                    <SelectValue placeholder="Select time range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">Last 1 month</SelectItem>
+                    <SelectItem value="3">Last 3 months</SelectItem>
+                    <SelectItem value="6">Last 6 months</SelectItem>
+                    <SelectItem value="12">Last 12 months</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Button
+                className="w-full h-12 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg"
+                onClick={handleImportTickets}
+                disabled={isImporting}
+              >
+                {isImporting ? "Importing..." : "Import Tickets"}
+              </Button>
+
+              {importStatus && (
+                <div
+                  className={`p-4 rounded-md ${
+                    importStatus.error ? "bg-red-50" : "bg-green-50"
+                  }`}
+                >
+                  {importStatus.error ? (
+                    <p className="text-red-700">{importStatus.error}</p>
+                  ) : (
+                    <p className="text-green-700">
+                      Successfully imported {importStatus.ticketsCount} tickets.
+                      {importStatus.completed && " Redirecting to dashboard..."}
+                    </p>
+                  )}
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Import Time Range</Label>
+                <Select
+                  defaultValue="1"
+                  onValueChange={(value) => setTimeRange(value)}
+                >
+                  <SelectTrigger className="h-12 bg-gray-50/50">
+                    <SelectValue placeholder="Select time range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">Last 1 month</SelectItem>
+                    <SelectItem value="3">Last 3 months</SelectItem>
+                    <SelectItem value="6">Last 6 months</SelectItem>
+                    <SelectItem value="12">Last 12 months</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Button
+                className="w-full h-12 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg"
+                onClick={handleConnectIntercom}
+                disabled={isConnecting}
+              >
+                {isConnecting ? "Connecting..." : "Connect Intercom"}
+              </Button>
+            </>
+          )}
 
           <Link href="/register">
             <Button

@@ -15,6 +15,8 @@ import Link from "next/link";
 import * as z from "zod";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { login } from "@/actions/login";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,6 +26,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export const LoginForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormValues>({
@@ -34,12 +37,22 @@ export const LoginForm = () => {
     },
   });
 
-  const onSubmit = () => {
-    setIsLoading(true);
-    console.log("Form submitted");
-    setTimeout(() => {
+  const onSubmit = async (values: FormValues) => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await login(values);
+
+      if (error) {
+        return;
+      }
+      if (data) console.log("login hogya", data);
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.log("nhi hua", error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
