@@ -1,12 +1,4 @@
-import {
-  Shield,
-  Bot,
-  Clock,
-  RefreshCw,
-  Lightbulb,
-  TrendingUp,
-  Brain,
-} from "lucide-react";
+import { Lightbulb, TrendingUp, Brain } from "lucide-react";
 import { Navbar } from "./Navbar";
 import { HeroSection } from "./HeroSection";
 import { CTA } from "./CTA";
@@ -14,34 +6,10 @@ import { Footer } from "./Footer";
 import { Pricing } from "./Pricing";
 import { FAQ } from "./FAQs";
 import Image from "next/image";
+import { Testimonials } from "./Testimonials";
+import FeaturesSection from "./FeatureSection";
 
 export const LandingPage = () => {
-  const features = [
-    {
-      icon: <Bot className="w-6 h-6 text-primary"></Bot>,
-      title: "Smart AI Analysis",
-      description:
-        "Advanced machine learning algorithms analyze and categorize support tickets automatically.",
-    },
-    {
-      icon: <Clock className="w-6 h-6 text-primary" />,
-      title: "Real-time Processing",
-      description:
-        "Instant analysis and categorization of incoming tickets as they arrive.",
-    },
-    {
-      icon: <Shield className="w-6 h-6 text-primary" />,
-      title: "Secure & Reliable",
-      description: "Enterprise-grade security with 99.9% uptime guarantee.",
-    },
-    {
-      icon: <RefreshCw className="w-6 h-6 text-primary" />,
-      title: "Auto Updates",
-      description:
-        "Continuous improvements and model updates for better accuracy.",
-    },
-  ];
-
   const advancedFeatures = [
     {
       icon: <Brain className="w-6 h-6 text-primary-600" />,
@@ -70,38 +38,20 @@ export const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-white to-purple-50">
       <Navbar />
 
       <HeroSection />
 
-      <section className="py-20 ">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="group p-6 bg-white rounded-2xl border border-gray-100 hover:border-primary-100 hover:shadow-lg transition-all duration-300"
-              >
-                <div className="bg-primary-50 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      <div className="border-y border-gray-100 bg-white">
+      <FeaturesSection />
+      <div className=" bg-white py-20">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center mb-12 animate-fade-up">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Seamless Integration with Your Tools
+            <h2 className="text-5xl font-bold text-gray-900 mb-4">
+              <span className="text-primary-600">Seamless Integration</span>{" "}
+              with Your Tools
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto text-xl">
               Connect with your favorite platforms in minutes. Start with
               Intercom, with more integrations coming soon.
             </p>
@@ -127,15 +77,36 @@ export const LandingPage = () => {
               />
               <span className="text-gray-700 font-medium">Intercom</span>
             </div>
+            <div className="bg-white p-4 rounded-xl shadow-sm flex items-center gap-4 border border-gray-100">
+              <Image
+                src="/assets/images/zendesk.png"
+                alt="zendesk"
+                width={25}
+                height={25}
+                // className="w-8 h-8 object-contain"
+              />
+              <span className="text-gray-700 font-medium">Intercom</span>
+            </div>
+            <div className="bg-white p-4 rounded-xl shadow-sm flex items-center gap-4 border border-gray-100">
+              <Image
+                src="/assets/images/fleshdesk.png"
+                alt="fleshdesk"
+                width={25}
+                height={25}
+                // className="w-8 h-8 object-contain"
+              />
+              <span className="text-gray-700 font-medium">Intercom</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <section id="features" className="py-20">
+      <section id="features" className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Powerful Features for Modern Support Teams
+            <h2 className="text-5xl font-bold text-gray-900 mb-4">
+              <span className="text-primary-600">Powerful Features</span> for
+              Modern Support Teams
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Everything you need to transform your customer support experience
@@ -174,6 +145,7 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
+      <Testimonials />
       <Pricing />
       <FAQ />
       <CTA />
