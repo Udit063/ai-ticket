@@ -2,6 +2,7 @@ import { CheckCircle2, Zap } from "lucide-react";
 import React from "react";
 import { GetStartedButton } from "./GetStartedButton";
 import { FloatingImage } from "./FloatingImage";
+import Link from "next/link";
 
 export const HeroSection = () => {
   const images = [
@@ -70,11 +71,14 @@ export const HeroSection = () => {
                   response times and improve satisfaction.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-                  <GetStartedButton
-                    content="Start Free Trial"
-                    className="py-7 px-4 md:px-12"
-                    icon={true}
-                  />
+                  <Link href="/register">
+                    {" "}
+                    <GetStartedButton
+                      content="Start Free Trial"
+                      className="py-7 px-4 md:px-12"
+                      icon={true}
+                    />
+                  </Link>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-8 justify-center items-center text-sm text-gray-500">
                   <div className="flex items-center gap-2">
