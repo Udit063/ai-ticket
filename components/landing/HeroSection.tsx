@@ -36,13 +36,12 @@ export const HeroSection = () => {
   ];
   return (
     <div>
-      <section className=" py-20 md:pt-40 md:pb-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+      <section className=" py-20 pt-40 md:pb-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
         <div className="absolute blur-blob bg-purple-200 top-0 left-[35%] w-[500px] h-[500px]" />
-        {/* <div className="absolute blur-blob bg-blue-200 bottom-0 right-[25%] w-[500px] h-[500px]" /> */}
 
         <div className="container mx-auto px-4">
-          <div className=" flex flex-col items-center text-center space-y-8">
-            <div className="max-w-4xl mx-auto text-center relative">
+          <div className=" flex flex-col items-center justify-center text-center space-y-8">
+            <div className="max-w-4xl mx-auto text-center justify-center relative">
               {images.map((image, index) => (
                 <FloatingImage
                   key={index}
@@ -73,7 +72,7 @@ export const HeroSection = () => {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
                   <GetStartedButton
                     content="Start Free Trial"
-                    className="py-7 px-12"
+                    className="py-7 px-4 md:px-12"
                     icon={true}
                   />
                 </div>

@@ -8,6 +8,7 @@ import { FAQ } from "./FAQs";
 import Image from "next/image";
 import { Testimonials } from "./Testimonials";
 import FeaturesSection from "./FeatureSection";
+import { BentoGrid } from "./BentoGrid";
 
 export const LandingPage = () => {
   const advancedFeatures = [
@@ -107,56 +108,8 @@ export const LandingPage = () => {
         </div>
       </div>
 
-      <section id="features" className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-purple-50 rounded-full px-4 py-2 mb-6">
-              <SparklesIcon className="w-5 h-5 text-purple-600" />
-              <span className="text-sm font-medium text-purple-600">
-                Features
-              </span>
-            </div>
-            <h2 className="text-5xl font-bold text-gray-900 mb-4">
-              <span className="text-primary-600">Powerful Features</span> for
-              Modern Support Teams
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Everything you need to transform your customer support experience
-            </p>
-          </div>
-          <div className="space-y-24">
-            {advancedFeatures.map((feature, index) => (
-              <div
-                key={index}
-                className={`flex flex-col ${
-                  index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                } items-center gap-12`}
-              >
-                <div className="flex-1">
-                  <div className="max-w-xl">
-                    <div className="bg-primary-50 w-12 h-12 rounded-xl flex items-center justify-center mb-6">
-                      {feature.icon}
-                    </div>
-                    <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                      {feature.title}
-                    </h3>
-                    <p className="text-xl text-gray-600 mb-8">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <img
-                    src={feature.image}
-                    alt={feature.title}
-                    className="rounded-2xl shadow-2xl w-full"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <BentoGrid />
+
       <Testimonials />
       <Pricing />
       <FAQ />

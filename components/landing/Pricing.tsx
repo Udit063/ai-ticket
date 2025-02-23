@@ -2,30 +2,63 @@
 
 import { motion } from "framer-motion";
 import { Check, SparklesIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { pricingPlans } from "@/constants/pricingPlans";
+import {
+  createClientComponentClient,
+  User,
+} from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 export const Pricing = () => {
+  const router = useRouter();
   const [isYearly, setIsYearly] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const features = {
-    free: [
-      "Up to 100 tickets per month",
-      "Basic ticket summaries",
-      "Standard categorization",
-      "Simple QA analysis",
-      "Email support",
-      "Basic analytics dashboard",
-    ],
-    pro: [
-      "Unlimited ticket processing",
-      "Advanced AI customization",
-      "Full historical data access",
-      "Enhanced insights & reporting",
-      "Priority support",
-      "Custom integration options",
-      "Advanced analytics",
-      "API access",
-    ],
+  const getDisplayPlans = () => {
+    return pricingPlans.filter(
+      (plan) => plan.period === (isYearly ? "/year" : "/month")
+    );
+  };
+
+  const supabase = createClientComponentClient();
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+        if (error) {
+          console.error("Auth error:", error);
+        }
+        if (session?.user) {
+          setUser(session?.user);
+        }
+      } catch (err) {
+        console.error("Failed to get session:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [supabase]);
+
+  const handlePlanSelect = async (plan: any) => {
+    if (plan.price === "0") {
+      router.push(plan.link);
+      return;
+    }
+
+    if (!user) {
+      router.push(`/login?redirectTo=${"/"}`);
+      return;
+    }
+
+    router.push(`${plan.link}?prefilled_email=${user.email}`);
   };
 
   return (
@@ -54,6 +87,7 @@ export const Pricing = () => {
             Choose the plan that best fits your needs
           </motion.p>
         </div>
+
         <div className="mb-12 flex justify-center">
           <motion.div
             initial={{ opacity: 0 }}
@@ -76,7 +110,7 @@ export const Pricing = () => {
               onClick={() => setIsYearly(true)}
               className={`rounded-full px-6 py-1.5 text-sm font-medium transition-all ${
                 isYearly
-                  ? "bg-primary-600 text-white"
+                  ? "bg-purple-600 text-white"
                   : "hover:bg-gray-50 dark:hover:bg-gray-800"
               }`}
             >
@@ -84,92 +118,64 @@ export const Pricing = () => {
             </button>
           </motion.div>
         </div>
-        <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition-all hover:border-purple-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
-          >
-            <div className="mb-8 space-y-4">
-              <h3 className="text-xl font-semibold">Free Tier</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Perfect for getting started
-              </p>
-              <div>
-                <span className="text-4xl font-semibold">$0</span>
-                <span className="ml-1 text-gray-600 dark:text-gray-300">
-                  /month
-                </span>
-                <p className="mt-1 text-sm text-purple-600 dark:text-purple-400">
-                  Get started for free • No credit card required
-                </p>
-              </div>
-              <button className="mt-2 w-full rounded-lg border border-purple-600 bg-white px-4 py-2 text-sm font-medium text-purple-600 transition-colors hover:bg-purple-50 dark:border-purple-400 dark:bg-gray-900 dark:text-purple-400 dark:hover:bg-gray-800">
-                Get Started
-              </button>
-            </div>
-            <div className="space-y-3">
-              {features.free.map((feature) => (
-                <div
-                  key={feature}
-                  className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300"
-                >
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-purple-600 dark:text-purple-400" />
-                  <span>{feature}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
 
-          {/* Pro Plan */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-            className="relative rounded-2xl border border-purple-200 bg-white p-8 shadow-sm transition-all hover:shadow-md dark:border-purple-800/50 dark:bg-gray-900"
-          >
-            <div className="absolute -top-px left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
-            <div className="mb-8 space-y-4">
-              <h3 className="text-xl font-semibold">Pro Plan</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                For growing teams
-              </p>
-              <div>
-                <span className="text-4xl font-semibold">
-                  ${isYearly ? "499" : "49"}
-                </span>
-                <span className="ml-1 text-gray-600 dark:text-gray-300">
-                  /{isYearly ? "year" : "month"}
-                </span>
-                {isYearly ? (
-                  <p className="mt-1 text-sm text-purple-600 dark:text-purple-400">
-                    Save $89 yearly
-                  </p>
-                ) : (
-                  <p className="mt-1 text-sm text-purple-600 dark:text-purple-400">
-                    Pay monthly, cancel anytime
-                  </p>
-                )}
-              </div>
-              <button className="mt-2 w-full rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-700">
-                Start Free Trial
-              </button>
-            </div>
-            <div className="space-y-3">
-              {features.pro.map((feature) => (
-                <div
-                  key={feature}
-                  className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300"
-                >
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-purple-600 dark:text-purple-400" />
-                  <span>{feature}</span>
+        <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2">
+          {getDisplayPlans().map((plan, index) => (
+            <motion.div
+              key={`${plan.name}-${plan.period}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 + index * 0.1 }}
+              className={`relative rounded-2xl border ${
+                plan.highlighted
+                  ? "border-purple-200 dark:border-purple-800/50"
+                  : "border-gray-200 dark:border-gray-800"
+              } bg-white p-8 shadow-sm transition-all hover:shadow-md dark:bg-gray-900`}
+            >
+              {plan.highlighted && (
+                <div className="absolute -top-px left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
+              )}
+              <div className="mb-8 space-y-4">
+                <h3 className="text-xl font-semibold">{plan.name}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  {plan.description}
+                </p>
+                <div>
+                  <span className="text-4xl font-semibold">${plan.price}</span>
+                  <span className="ml-1 text-gray-600 dark:text-gray-300">
+                    {plan.period}
+                  </span>
+                  {plan.callout && (
+                    <p className="mt-1 text-sm text-purple-600 dark:text-purple-400">
+                      {plan.callout}
+                    </p>
+                  )}
                 </div>
-              ))}
-            </div>
-          </motion.div>
+                <Button
+                  className={`mt-2 w-full rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                    plan.buttonVariant === "outline"
+                      ? "border border-purple-600 bg-white text-purple-600 hover:bg-purple-50 dark:border-purple-400 dark:bg-gray-900 dark:text-purple-400 dark:hover:bg-gray-800"
+                      : "bg-purple-600 text-white hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-700"
+                  }`}
+                  onClick={() => handlePlanSelect(plan)}
+                >
+                  {plan.buttonText}
+                </Button>
+              </div>
+              <div className="space-y-3">
+                {plan.features.map((feature) => (
+                  <div
+                    key={feature}
+                    className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300"
+                  >
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-purple-600 dark:text-purple-400" />
+                    <span>{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

@@ -27,14 +27,16 @@ export function Navbar() {
           </Badge>
         )}
         {userPlan === "free" ? (
-          <Button
-            variant="outline"
-            size="sm"
-            className="text-purple-600 border-purple-600 hover:bg-purple-50"
-          >
-            <Zap className="w-3 h-3 mr-1" />
-            Upgrade to Pro
-          </Button>
+          <Link href="/#pricing">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-purple-600 border-purple-600 hover:bg-purple-50"
+            >
+              <Zap className="w-3 h-3 mr-1" />
+              Upgrade to Pro
+            </Button>
+          </Link>
         ) : (
           <Badge variant="secondary" className="bg-purple-100 text-purple-600">
             <Zap className="w-3 h-3 mr-1" />
