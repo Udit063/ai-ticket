@@ -1,4 +1,4 @@
-import { Lightbulb, TrendingUp, Brain, SparklesIcon } from "lucide-react";
+import { SparklesIcon } from "lucide-react";
 import { Navbar } from "./Navbar";
 import { HeroSection } from "./HeroSection";
 import { CTA } from "./CTA";
@@ -11,33 +11,6 @@ import FeaturesSection from "./FeatureSection";
 import { BentoGrid } from "./BentoGrid";
 
 export const LandingPage = () => {
-  const advancedFeatures = [
-    {
-      icon: <Brain className="w-6 h-6 text-primary-600" />,
-      title: "AI-Powered Ticket Analysis",
-      description:
-        "Our advanced AI processes each ticket, extracting key information, sentiment, and priority to streamline your support workflow.",
-      image:
-        "https://media.istockphoto.com/id/1515913422/photo/a-data-analyst-using-technology-ai-for-working-tool-for-data-analysis-chatbot-chat-with-ai.jpg?s=612x612&w=0&k=20&c=oOKLdZJpcsrUbNrnGVf8TwoIdYud4mWoBkx1A3PdXI0=",
-    },
-    {
-      icon: <Lightbulb className="w-6 h-6 text-primary-600" />,
-      title: "Smart Categorization",
-      description:
-        "Automatically categorize and route tickets to the right department or team member, reducing response times and improving efficiency.",
-      image:
-        "https://collectionperformance.com/wp-content/uploads/elementor/thumbs/smart-home-house-technology-3574545-qh8obn6cde8lirj94bvtmh1dk6feel21gfc8vf86y8.jpg",
-    },
-    {
-      icon: <TrendingUp className="w-6 h-6 text-primary-600" />,
-      title: "Actionable Insights",
-      description:
-        "Gain valuable insights into your support performance with detailed analytics and customizable reports.",
-      image:
-        "https://media.istockphoto.com/id/1488294044/photo/businessman-works-on-laptop-showing-business-analytics-dashboard-with-charts-metrics-and-kpi.jpg?s=612x612&w=0&k=20&c=AcxzQAe1LY4lGp0C6EQ6reI7ZkFC2ftS09yw_3BVkpk=",
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-purple-50">
       <Navbar />

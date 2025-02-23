@@ -17,27 +17,27 @@ import {
   SelectValue,
 } from "../ui/select";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {
-  getIntercomWorkspaceInfo,
-  importIntercomTickets,
-} from "@/lib/intercom-api";
+// import {
+//   getIntercomWorkspaceInfo,
+//   importIntercomTickets,
+// } from "@/lib/intercom-api";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const Onboarding = () => {
-  const [timeRange, setTimeRange] = useState("1");
+  // const [timeRange, setTimeRange] = useState("1");
   const [isConnecting, setIsConnecting] = useState(false);
-  const [isImporting, setIsImporting] = useState(false);
+  // const [isImporting, setIsImporting] = useState(false);
   const [connected, setConnected] = useState(false);
-  const [workspaceName, setWorkspaceName] = useState("");
-  const [importStatus, setImportStatus] = useState<{
-    completed: boolean;
-    ticketsCount: number;
-    error?: string;
-  } | null>(null);
+  // const [workspaceName, setWorkspaceName] = useState("");
+  // const [importStatus, setImportStatus] = useState<{
+  //   completed: boolean;
+  //   ticketsCount: number;
+  //   error?: string;
+  // } | null>(null);
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
@@ -55,7 +55,7 @@ export const Onboarding = () => {
       .update({
         is_intercom_connected: true,
       })
-      .eq("id", session.user.id);
+      .eq("id", session?.user.id);
 
     if (error) {
       console.error("Error updating connection status:", error);
@@ -80,75 +80,75 @@ export const Onboarding = () => {
     }
   };
 
-  const handleImportTickets = async () => {
-    if (!session?.accessToken) {
-      return;
-    }
+  // const handleImportTickets = async () => {
+  //   if (!session?.accessToken) {
+  //     return;
+  //   }
 
-    setIsImporting(true);
+  //   setIsImporting(true);
 
-    try {
-      console.log("start hua");
+  //   try {
+  //     console.log("start hua");
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      console.log("user bhi mil gya", user);
+  //     const {
+  //       data: { user },
+  //     } = await supabase.auth.getUser();
+  //     console.log("user bhi mil gya", user);
 
-      if (!user) {
-        throw new Error("User not authenticated");
-      }
+  //     if (!user) {
+  //       throw new Error("User not authenticated");
+  //     }
 
-      const workspace = await getIntercomWorkspaceInfo(session.accessToken);
-      setWorkspaceName(workspace.name);
+  //     const workspace = await getIntercomWorkspaceInfo(session.accessToken);
+  //     setWorkspaceName(workspace.name);
 
-      const result = await importIntercomTickets(
-        session.accessToken,
-        parseInt(timeRange),
-        user.id
-      );
-      console.log("yahan bhi aagya");
+  //     const result = await importIntercomTickets(
+  //       session.accessToken,
+  //       parseInt(timeRange),
+  //       user.id
+  //     );
+  //     console.log("yahan bhi aagya");
 
-      if (result.completed) {
-        console.log("result chl gya");
+  //     if (result.completed) {
+  //       console.log("result chl gya");
 
-        setImportStatus({
-          completed: true,
-          ticketsCount: result.ticketsImported,
-          error: undefined,
-        });
+  //       setImportStatus({
+  //         completed: true,
+  //         ticketsCount: result.ticketsImported,
+  //         error: undefined,
+  //       });
 
-        // Update user profile to mark onboarding as complete
-        await supabase.from("users").upsert({
-          id: user.id,
-          onboarding_completed: true,
-          intercom_connected: true,
-          intercom_workspace: workspace.name,
-          intercom_account_id: session.providerAccountId,
-        });
-        console.log("hogya bc");
+  //       // Update user profile to mark onboarding as complete
+  //       await supabase.from("users").upsert({
+  //         id: user.id,
+  //         onboarding_completed: true,
+  //         intercom_connected: true,
+  //         intercom_workspace: workspace.name,
+  //         intercom_account_id: session.providerAccountId,
+  //       });
+  //       console.log("hogya bc");
 
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 2000);
-      } else {
-        setImportStatus({
-          completed: false,
-          ticketsCount: 0,
-          error: result.error,
-        });
-      }
-    } catch (error) {
-      console.error("Import error:", error);
-      setImportStatus({
-        completed: false,
-        ticketsCount: 0,
-        error: "Failed to import tickets",
-      });
-    } finally {
-      setIsImporting(false);
-    }
-  };
+  //       setTimeout(() => {
+  //         router.push("/dashboard");
+  //       }, 2000);
+  //     } else {
+  //       setImportStatus({
+  //         completed: false,
+  //         ticketsCount: 0,
+  //         error: result.error,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Import error:", error);
+  //     setImportStatus({
+  //       completed: false,
+  //       ticketsCount: 0,
+  //       error: "Failed to import tickets",
+  //     });
+  //   } finally {
+  //     setIsImporting(false);
+  //   }
+  // };
 
   const isIntercomConnected = connected;
 
@@ -169,7 +169,7 @@ export const Onboarding = () => {
               <div className="p-4 mb-6 bg-green-50 rounded-md flex items-center space-x-2">
                 <CheckCircle className="h-5 w-5 text-green-500" />
                 <span className="text-green-700 font-medium">
-                  Connected to {workspaceName || "Intercom"}
+                  Connected to {"Intercom"}
                 </span>
               </div>
 
@@ -229,7 +229,7 @@ export const Onboarding = () => {
                 <Label className="text-sm font-medium">Import Time Range</Label>
                 <Select
                   defaultValue="1"
-                  onValueChange={(value) => setTimeRange(value)}
+                  // onValueChange={(value) => setTimeRange(value)}
                 >
                   <SelectTrigger className="h-12 bg-gray-50/50">
                     <SelectValue placeholder="Select time range" />
