@@ -14,7 +14,7 @@ export const pricingPlans = [
     ],
     highlighted: false,
     buttonText: "Get Started",
-    link: "http://localhost:3000/dashboard",
+    link: "https://ai-ticket.vercel.app/dashboard",
     callout: "Get started for free • No credit card required",
     buttonVariant: "outline",
   },

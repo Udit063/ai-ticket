@@ -35,7 +35,7 @@ export default function IntercomProvider<P extends IntercomProfile>(
       url: "https://app.intercom.com/oauth",
       params: {
         scope: "read",
-        redirect_uri: `http://localhost:3000/api/auth/callback/intercom`,
+        redirect_uri: `https://ai-ticket.vercel.app/api/auth/callback/intercom`,
       },
     },
     token: "https://api.intercom.io/auth/eagle/token",

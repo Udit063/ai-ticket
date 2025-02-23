@@ -9,7 +9,7 @@ export const register = async (email: string, password: string) => {
         data: {
           name: name,
         },
-        emailRedirectTo: "http://localhost:3000/auth/callback",
+        emailRedirectTo: "https://ai-ticket.vercel.app/auth/callback",
       },
     });
 
