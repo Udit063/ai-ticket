@@ -55,7 +55,7 @@ export const Onboarding = () => {
       .update({
         is_intercom_connected: true,
       })
-      .eq("id", session?.user.id);
+      .eq("id", session.user.id);
 
     if (error) {
       console.error("Error updating connection status:", error);
