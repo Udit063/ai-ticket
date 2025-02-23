@@ -7,6 +7,7 @@ import {
   LineChart,
   ResponsiveContainer,
   Tooltip,
+  TooltipProps,
   XAxis,
   YAxis,
 } from "recharts";
@@ -196,7 +197,11 @@ export const SentimentAnalysis = () => {
   );
 };
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
+  active,
+  payload,
+  label,
+}) => {
   if (active && payload && payload.length) {
     const positive = payload[0].value;
     const negative = payload[1].value;

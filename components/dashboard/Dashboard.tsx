@@ -180,7 +180,7 @@ export const Dashboard = () => {
                           <LabelList
                             dataKey="value"
                             position="top"
-                            formatter={(value: any) => `${value}%`}
+                            formatter={(value: number | string) => `${value}%`}
                             style={{ fill: "#666", fontSize: "10px" }}
                           />
                         </Bar>
@@ -252,7 +252,7 @@ export const Dashboard = () => {
                           <LabelList
                             dataKey="value"
                             position="top"
-                            formatter={(value: any) => `${value}%`}
+                            formatter={(value: number | string) => `${value}%`}
                             style={{ fill: "#666", fontSize: "10px" }}
                           />
                         </Bar>

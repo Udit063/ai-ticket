@@ -39,6 +39,8 @@ export const TicketCard = ({ ticket }: TicketCardProps) => {
   };
 
   const getCategoryColor = (category: string) => {
+    console.log(category);
+
     return "bg-[#F1F0FB] text-[#9b87f5] border-[#D6BCFA]";
   };
 

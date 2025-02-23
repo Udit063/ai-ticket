@@ -11,11 +11,15 @@ import {
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 
+interface Plan {
+  price: string | number;
+  link: string;
+}
+
 export const Pricing = () => {
   const router = useRouter();
   const [isYearly, setIsYearly] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
 
   const getDisplayPlans = () => {
     return pricingPlans.filter(
@@ -39,15 +43,13 @@ export const Pricing = () => {
         }
       } catch (err) {
         console.error("Failed to get session:", err);
-      } finally {
-        setLoading(false);
       }
     };
 
     checkAuth();
   }, [supabase]);
 
-  const handlePlanSelect = async (plan: any) => {
+  const handlePlanSelect = async (plan: Partial<Plan>) => {
     if (plan.price === "0") {
       router.push(plan.link);
       return;
