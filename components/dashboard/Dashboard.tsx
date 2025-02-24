@@ -42,7 +42,7 @@ export const Dashboard = () => {
   return (
     <div className="animate-fade-in">
       <div className="max-w-7xl mx-auto space-y-8">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row gap-6 justify-between md:items-center">
           <div>
             <div className="flex items-center gap-3">
               <BookOpenText className="h-8 w-8 text-primary" />

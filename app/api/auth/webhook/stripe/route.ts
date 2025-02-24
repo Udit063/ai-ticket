@@ -93,7 +93,17 @@ export async function POST(req: NextRequest) {
 
         const userId = userData.id;
 
-        const { error: updateError } = await supabase
+        console.log("Attempting to update user with ID:", userId);
+        console.log("Update payload:", {
+          stripe_customer_id: customerId,
+          subscription_status: "active",
+          price_id: priceId,
+          subscription_end_date: new Date(
+            session.expires_at * 1000
+          ).toISOString(),
+        });
+
+        const { data: updateData, error: updateError } = await supabase
           .from("users")
           .update({
             stripe_customer_id: customerId,
@@ -103,15 +113,19 @@ export async function POST(req: NextRequest) {
               session.expires_at * 1000
             ).toISOString(),
           })
-          .eq("id", userId);
+          .eq("id", userId)
+          .select();
 
         if (updateError) {
           console.error("Failed to update user:", updateError);
+          console.error("Error details:", JSON.stringify(updateError));
+
           return NextResponse.json(
             { error: "Failed to update user" },
             { status: 500 }
           );
         }
+        console.log("Update successful:", updateData);
 
         console.log(
           `Successfully updated subscription status for user: ${customerEmail}`
@@ -136,7 +150,7 @@ export async function POST(req: NextRequest) {
         }
 
         const { data: userData, error: userError } = await supabase
-          .from("auth.users")
+          .from("users")
           .select("id")
           .eq("email", customerEmail)
           .single();

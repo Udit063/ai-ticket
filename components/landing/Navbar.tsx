@@ -7,6 +7,12 @@ import { GetStartedButton } from "./GetStartedButton";
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const navItems = [
+    { href: "#features", label: "Features" },
+    { href: "#pricing", label: "Pricing" },
+    { href: "#questions", label: "FAQs" },
+  ];
+
   return (
     <div>
       <nav className="fixed top-0 left-0 right-0 bg-white/50 backdrop-blur-xl border-b border-gray-100 z-50">
@@ -68,7 +74,21 @@ export const Navbar = () => {
 
           {isMenuOpen && (
             <div className="md:hidden py-4 border-t border-gray-100 animate-fade-in">
-              {/* ... keep existing code (mobile menu) */}
+              <div className="flex flex-col gap-4">
+                {navItems.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                ))}
+                <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+                  <GetStartedButton content="Get Started" className="w-full" />
+                </Link>
+              </div>
             </div>
           )}
         </div>

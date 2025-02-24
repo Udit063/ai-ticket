@@ -37,17 +37,17 @@ export const FAQ = () => {
             <SparklesIcon className="w-5 h-5 text-purple-600" />
             <span className="text-sm font-medium text-purple-600">FAQs</span>
           </div>{" "}
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-md md:text-xl text-gray-600 max-w-2xl mx-auto">
             Everything you need to know about TicketAI
           </p>
         </div>
         <div className="max-w-3xl mx-auto divide-y divide-gray-200">
           {faqs.map((faq, index) => (
             <div key={index} className="py-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              <h3 className="text-md md:text-xl font-semibold text-gray-900 mb-4">
                 {faq.question}
               </h3>
               <p className="text-gray-600 leading-relaxed">{faq.answer}</p>

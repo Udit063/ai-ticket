@@ -9,28 +9,28 @@ export const HeroSection = () => {
     {
       src: "/assets/images/slack.png",
       alt: "Slack Icon",
-      position: "left-0 top-64 md:-left-10",
+      position: " top-80 md:top-64 left-0 md:-left-10",
       delay: 0,
       cropPosition: "object-left-top",
     },
     {
       src: "/assets/images/intercom.png",
       alt: "intercom Icon",
-      position: " top-64 md:-right-10",
+      position: " top-80 md:top-64 right-0 md:-right-10",
       delay: 1,
       cropPosition: "object-right-top",
     },
     {
       src: "/assets/images/zendesk.png",
       alt: "zendesk Icon",
-      position: "bottom-20 left-[10%]",
+      position: "bottom-0 md:bottom-10 left-[10%]",
       delay: 2,
       cropPosition: "object-left-bottom",
     },
     {
       src: "/assets/images/fleshdesk.png",
       alt: "fleshdesk Icon",
-      position: "right-[10%] bottom-20",
+      position: "right-[10%] bottom-0 md:bottom-20",
       delay: 3,
       cropPosition: "object-right-bottom",
     },
@@ -40,7 +40,7 @@ export const HeroSection = () => {
       <section className=" py-20 pt-40 md:pb-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
         <div className="absolute blur-blob bg-purple-200 top-0 left-[35%] w-[500px] h-[500px]" />
 
-        <div className="container mx-auto px-4">
+        <div className="mx-auto  md:px-4">
           <div className=" flex flex-col items-center justify-center text-center space-y-8">
             <div className="max-w-4xl mx-auto text-center justify-center relative">
               {images.map((image, index) => (
@@ -53,19 +53,19 @@ export const HeroSection = () => {
                   cropPosition={image.cropPosition}
                 />
               ))}
-              <div className="animate-fade-up">
-                <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 mb-8 shadow-md text-primary-600">
+              <div className="animate-fade-up flex flex-col items-center justify-center">
+                <div className="inline-flex items-center justify-center gap-2 bg-white rounded-full px-4 py-2 mb-8 shadow-md text-primary-600">
                   <Zap className="w-4 h-4" />
                   <span>Revolutionizing Customer Support</span>
                 </div>
-                <h1 className="text-4xl md:text-7xl font-bold mb-8 text-gray-900 leading-tight">
+                <h1 className="text-4xl md:text-7xl font-bold mb-4 md:mb-8 text-gray-900 leading-tight">
                   Support Smarter with
                   <span className="text-primary-600 block">
                     {" "}
                     AI-Powered Insights
                   </span>
                 </h1>
-                <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-md md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
                   Transform your customer support with AI that analyzes,
                   categorizes, and prioritizes tickets automatically. Reduce
                   response times and improve satisfaction.
@@ -81,17 +81,19 @@ export const HeroSection = () => {
                   </Link>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-8 justify-center items-center text-sm text-gray-500">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span>No credit card required</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span>14-day free trial</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span>Cancel anytime</span>
+                  <div className="flex flex-col sm:flex-row gap-8 justify-center">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-green-500" />
+                      <span>No credit card required</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-green-500" />
+                      <span>14-day free trial</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-green-500" />
+                      <span>Cancel anytime</span>
+                    </div>
                   </div>
                 </div>
               </div>

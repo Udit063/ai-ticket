@@ -5,11 +5,11 @@ import { ArrowRight } from "lucide-react";
 export const CTA = () => {
   return (
     <div>
-      <section className="py-20 bg-white w-full">
-        <div className="container mx-auto px-4">
-          <div className=" mx-auto bg-gradient-to-r from-primary-500 to-primary-600 rounded-3xl p-12 md:p-20 text-center relative overflow-hidden">
+      <section className="py-12 md:py-20 bg-white w-full">
+        <div className="container mx-auto px-1 md:px-4">
+          <div className=" mx-auto bg-gradient-to-r from-primary-500 to-primary-600 rounded-3xl p-6 md:p-20 text-center relative overflow-hidden">
             <div className="relative z-10">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
                 Ready to Transform Your Support?
               </h2>
               <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto">
