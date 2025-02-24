@@ -75,7 +75,7 @@ export const Pricing = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-4 text-5xl font-semibold tracking-tight sm:text-4xl"
+            className="mb-4 text-3xl md:text-5xl font-semibold tracking-tight sm:text-4xl"
           >
             Simple, Transparent <span className="text-purple-600">Pricing</span>
           </motion.h2>
@@ -84,7 +84,7 @@ export const Pricing = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-gray-600 dark:text-gray-300 text-xl"
+            className="text-gray-600 dark:text-gray-300 text-md md:text-xl"
           >
             Choose the plan that best fits your needs
           </motion.p>

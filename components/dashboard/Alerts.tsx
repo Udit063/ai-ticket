@@ -149,7 +149,7 @@ export const Alerts = () => {
   return (
     <div className="min-h-screen animate-fade-in">
       <div className="max-w-7xl mx-auto space-y-8">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row gap-6 justify-between md:items-center">
           <div>
             <div className="flex items-center gap-3">
               <Bell className="h-8 w-8 text-primary" />
@@ -163,7 +163,7 @@ export const Alerts = () => {
           </div>
           <Badge
             variant="outline"
-            className="px-4 py-2 rounded-full font-medium"
+            className="px-4 py-2 rounded-full font-medium w-fit"
           >
             {alerts.length} Active Alerts
           </Badge>

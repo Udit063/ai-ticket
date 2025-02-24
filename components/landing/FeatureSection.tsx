@@ -35,12 +35,12 @@ const features = [
 
 export default function FeaturesSection() {
   return (
-    <section className="relative w-full  bg-gray-50 py-16">
+    <section className="relative w-full px-4 bg-gray-50 py-16">
       <div className="absolute inset-0">
         <div className="absolute left-1/2 top-0 h-[400px] w-[100px] -translate-x-1/2 rounded-full bg-purple-200/50 blur-3xl " />
       </div>
 
-      <div className="container relative px-4">
+      <div className="container relative">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, i) => (
             <motion.div

@@ -74,7 +74,7 @@ const FeatureCard = ({
 
 export const BentoGrid = () => {
   return (
-    <section className="py-20 px-4 md:px-8 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-12 md:py-20 px-4 md:px-8 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-purple-50 rounded-full px-4 py-2 mb-6">
@@ -83,11 +83,11 @@ export const BentoGrid = () => {
               Features
             </span>
           </div>
-          <h2 className="text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
             <span className="text-primary-600">Powerful Features</span> for
             Modern Support Teams
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-md md:text-xl text-gray-600 max-w-2xl mx-auto">
             Everything you need to transform your customer support experience
           </p>
         </div>

@@ -11,15 +11,15 @@ export const Testimonials = () => {
               Testimonials
             </span>
           </div>
-          <h2 className="text-5xl font-bold mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
             <span className="text-primary-600">Loved</span> by Support Teams
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-md md:text-xl">
             See what support professionals are saying about TicketAI.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-20 md:gap-8 max-w-6xl mx-auto">
           {[
             {
               quote:
