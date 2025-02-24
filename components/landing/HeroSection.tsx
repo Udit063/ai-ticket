@@ -30,7 +30,7 @@ export const HeroSection = () => {
     {
       src: "/assets/images/fleshdesk.png",
       alt: "fleshdesk Icon",
-      position: "right-[10%] bottom-0 md:bottom-20",
+      position: "right-[10%] bottom-0 md:bottom-10",
       delay: 3,
       cropPosition: "object-right-bottom",
     },

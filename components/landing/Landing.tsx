@@ -12,7 +12,7 @@ import { BentoGrid } from "./BentoGrid";
 
 export const LandingPage = () => {
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-b from-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-b from-white to-purple-50 overflow-hidden">
       <Navbar />
 
       <HeroSection />

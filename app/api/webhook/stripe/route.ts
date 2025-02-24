@@ -113,8 +113,7 @@ export async function POST(req: NextRequest) {
               session.expires_at * 1000
             ).toISOString(),
           })
-          .eq("id", userId)
-          .select();
+          .eq("id", userId);
 
         if (updateError) {
           console.error("Failed to update user:", updateError);
