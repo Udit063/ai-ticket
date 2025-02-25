@@ -15,8 +15,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { register } from "@/actions/register";
-import { toast } from "sonner";
+// import { register } from "@/actions/register";
+import { signupWithEmailPassword } from "@/actions/auth";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -42,20 +42,20 @@ export const RegisterForm = () => {
   const onSubmit = async (values: FormValues) => {
     try {
       setIsLoading(true);
-      const { data, error } = await register(values.email, values.password);
+      const { success, error } = await signupWithEmailPassword(
+        values.email,
+        values.password
+      );
 
       if (error) {
         return;
       }
 
-      if (data) console.log("hogya:", data);
-
-      toast.success(
-        "Registration successful! Please check your email to verify your account."
-      );
-      router.push("/verify");
+      if (success) {
+        console.log("hogya");
+        router.push("/verify");
+      }
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
       console.log(error);
     } finally {
       setIsLoading(false);

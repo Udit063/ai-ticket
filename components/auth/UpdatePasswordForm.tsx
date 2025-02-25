@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { updatePassword } from "@/actions/auth";
 
 const formSchema = z
   .object({
@@ -43,13 +44,17 @@ export const UpdatePasswordForm = () => {
     },
   });
 
-  const confirmPasswords = () => {
-    setIsLoading(true);
-    setError(null);
-    console.log("confirmPasswords");
-    setTimeout(() => {
+  const confirmPasswords = async (values: FormValues) => {
+    try {
+      setIsLoading(true);
+      const { success, error } = await updatePassword(values.password);
+      if (success) console.log("password updated successfully");
+      if (error) console.log("password not updated", error);
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -74,7 +79,10 @@ export const UpdatePasswordForm = () => {
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={confirmPasswords} className="space-y-6">
+            <form
+              onSubmit={form.handleSubmit(confirmPasswords)}
+              className="space-y-6"
+            >
               <FormField
                 control={form.control}
                 name="password"

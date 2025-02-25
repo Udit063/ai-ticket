@@ -4,12 +4,10 @@ import { motion } from "framer-motion";
 import { Check, SparklesIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { pricingPlans } from "@/constants/pricingPlans";
-import {
-  createClientComponentClient,
-  User,
-} from "@supabase/auth-helpers-nextjs";
+// import { User } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import { createClient } from "@/lib/supabase/client";
 
 interface Plan {
   price: string | number;
@@ -17,9 +15,10 @@ interface Plan {
 }
 
 export const Pricing = () => {
+  const supabase = createClient();
   const router = useRouter();
   const [isYearly, setIsYearly] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState(null);
 
   const getDisplayPlans = () => {
     return pricingPlans.filter(
@@ -27,27 +26,21 @@ export const Pricing = () => {
     );
   };
 
-  const supabase = createClientComponentClient();
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession();
-        if (error) {
-          console.error("Auth error:", error);
-        }
-        if (session?.user) {
-          setUser(session?.user);
-        }
-      } catch (err) {
-        console.error("Failed to get session:", err);
-      }
-    };
+    async function fetchUser() {
+      const { data, error } = await supabase.auth.getUser();
 
-    checkAuth();
-  }, [supabase]);
+      if (error) {
+        console.error("Error fetching user:", error);
+      } else {
+        console.log("user data", data.user);
+
+        setUser(data.user);
+      }
+    }
+
+    fetchUser();
+  }, []);
 
   const handlePlanSelect = async (plan: Partial<Plan>) => {
     if (plan.price === "0") {

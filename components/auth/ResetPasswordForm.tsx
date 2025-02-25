@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { sendResetPasswordEmail } from "@/actions/auth";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -32,12 +33,21 @@ export const ResetPasswordForm = () => {
     },
   });
 
-  const onSubmit = () => {
-    setIsLoading(true);
-    console.log("form submitted");
-    setTimeout(() => {
+  const onSubmit = async (values: FormValues) => {
+    try {
+      setIsLoading(true);
+      const { success, error } = await sendResetPasswordEmail(values.email);
+      if (success) {
+        console.log("password reset mail sent");
+      }
+      if (error) {
+        console.log("Reset mail not sent");
+      }
+    } catch (error) {
+      console.log("error", error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (

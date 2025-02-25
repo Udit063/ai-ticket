@@ -4,7 +4,8 @@ import { Button } from "../ui/button";
 import { LogOut } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { logout } from "@/actions/logout";
+// import { logout } from "@/actions/logout";
+import { signout } from "@/actions/auth";
 
 interface LogoutButtonProp {
   className?: string;
@@ -17,10 +18,10 @@ export const LogoutButton = ({ className }: LogoutButtonProp) => {
   const handleLogout = async () => {
     try {
       setIsLoading(true);
-      const { error } = await logout();
+      const { error } = await signout();
 
       if (error) {
-        console.log(error);
+        console.log("nhi hua", error);
 
         return;
       }
@@ -32,6 +33,7 @@ export const LogoutButton = ({ className }: LogoutButtonProp) => {
       setIsLoading(false);
     }
   };
+
   return (
     <Button
       onClick={handleLogout}
