@@ -16,7 +16,9 @@ import * as z from "zod";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { login } from "@/actions/login";
+// import { login } from "@/actions/login";
+import { signinWithEmailPassword } from "@/actions/auth";
+import { Info } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -28,6 +30,7 @@ type FormValues = z.infer<typeof formSchema>;
 export const LoginForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -40,16 +43,26 @@ export const LoginForm = () => {
   const onSubmit = async (values: FormValues) => {
     try {
       setIsLoading(true);
-      const { data, error } = await login(values.email, values.password);
+      const { success, error } = await signinWithEmailPassword(
+        values.email,
+        values.password
+      );
 
       if (error) {
-        return;
-      }
-      if (data) console.log("login hogya", data);
+        console.log("error", error);
+        setError("Invalid Login credentials!");
 
-      router.push("/dashboard");
+        return { error: error };
+      }
+
+      if (success) {
+        console.log("hogya");
+
+        router.push("/dashboard");
+      }
     } catch (error) {
-      console.log("nhi hua", error);
+      console.log("glt pass", error);
+      setError("Something went wrong!");
     } finally {
       setIsLoading(false);
     }
@@ -119,6 +132,12 @@ export const LoginForm = () => {
             >
               Login
             </Button>
+            {error && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <Info size={15} />
+                {error}
+              </p>
+            )}
           </form>
         </Form>
       </AuthWrapper>

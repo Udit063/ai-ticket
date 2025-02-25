@@ -16,6 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { updatePassword } from "@/actions/auth";
+import { Info } from "lucide-react";
 
 const formSchema = z
   .object({
@@ -31,7 +33,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export const UpdatePasswordForm = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState("");
 
   const router = useRouter();
 
@@ -43,13 +45,25 @@ export const UpdatePasswordForm = () => {
     },
   });
 
-  const confirmPasswords = () => {
-    setIsLoading(true);
-    setError(null);
-    console.log("confirmPasswords");
-    setTimeout(() => {
+  const confirmPasswords = async (values: FormValues) => {
+    try {
+      setIsLoading(true);
+      setError("");
+      const { success, error } = await updatePassword(values.password);
+      if (success) {
+        console.log("password updated successfully");
+        router.push("/login");
+      }
+      if (error) {
+        console.log("password not updated", error);
+        setError("Something went wrong");
+      }
+    } catch (error) {
+      console.log(error);
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -74,7 +88,10 @@ export const UpdatePasswordForm = () => {
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={confirmPasswords} className="space-y-6">
+            <form
+              onSubmit={form.handleSubmit(confirmPasswords)}
+              className="space-y-6"
+            >
               <FormField
                 control={form.control}
                 name="password"
@@ -124,6 +141,12 @@ export const UpdatePasswordForm = () => {
               >
                 {isLoading ? "Updating..." : "Update Password"}
               </Button>
+              {error && (
+                <p className="text-sm text-red-600 flex items-center gap-1">
+                  <Info size={15} />
+                  {error}
+                </p>
+              )}{" "}
             </form>
           </Form>
         )}

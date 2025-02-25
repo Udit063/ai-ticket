@@ -25,8 +25,8 @@ export const VerificationForm = () => {
               Check your email
             </h1>
             <p className="text-gray-600">
-              We&apos;ve sent a verification link to your email address. Please
-              click the link to verify your account.
+              We&apos;ve sent a link to your email address. Please click the
+              link to verify your account.
             </p>
           </div>
 
