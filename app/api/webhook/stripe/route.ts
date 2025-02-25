@@ -93,15 +93,9 @@ export async function POST(req: NextRequest) {
 
         const userId = userData.id;
 
-        console.log("Attempting to update user with ID:", userId);
-        console.log("Update payload:", {
-          stripe_customer_id: customerId,
-          subscription_status: "active",
-          price_id: priceId,
-          subscription_end_date: new Date(
-            session.expires_at * 1000
-          ).toISOString(),
-        });
+        const subscription = await stripe.subscriptions.retrieve(
+          fullSession.subscription as string
+        );
 
         const { data: updateData, error: updateError } = await supabase
           .from("users")
@@ -110,7 +104,7 @@ export async function POST(req: NextRequest) {
             subscription_status: "active",
             price_id: priceId,
             subscription_end_date: new Date(
-              session.expires_at * 1000
+              subscription.current_period_end * 1000
             ).toISOString(),
           })
           .eq("id", userId);

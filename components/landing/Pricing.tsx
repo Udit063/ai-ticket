@@ -56,7 +56,7 @@ export const Pricing = () => {
     }
 
     if (!user) {
-      router.push(`/login?redirectTo=${"/"}`);
+      router.push(`/login?redirectTo=${"/#pricing"}`);
       return;
     }
 
