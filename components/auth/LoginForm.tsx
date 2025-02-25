@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 // import { login } from "@/actions/login";
 import { signinWithEmailPassword } from "@/actions/auth";
+import { Info } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -29,6 +30,7 @@ type FormValues = z.infer<typeof formSchema>;
 export const LoginForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -48,14 +50,19 @@ export const LoginForm = () => {
 
       if (error) {
         console.log("error", error);
+        setError("Invalid Login credentials!");
+
         return { error: error };
       }
 
-      if (success) console.log("hogya");
+      if (success) {
+        console.log("hogya");
 
-      router.push("/dashboard");
+        router.push("/dashboard");
+      }
     } catch (error) {
-      console.log(error);
+      console.log("glt pass", error);
+      setError("Something went wrong!");
     } finally {
       setIsLoading(false);
     }
@@ -125,6 +132,12 @@ export const LoginForm = () => {
             >
               Login
             </Button>
+            {error && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <Info size={15} />
+                {error}
+              </p>
+            )}
           </form>
         </Form>
       </AuthWrapper>

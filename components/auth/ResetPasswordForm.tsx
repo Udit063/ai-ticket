@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { sendResetPasswordEmail } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -23,6 +24,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export const ResetPasswordForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
 
@@ -39,6 +41,7 @@ export const ResetPasswordForm = () => {
       const { success, error } = await sendResetPasswordEmail(values.email);
       if (success) {
         console.log("password reset mail sent");
+        router.push("/verify");
       }
       if (error) {
         console.log("Reset mail not sent");
